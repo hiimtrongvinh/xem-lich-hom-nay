@@ -249,14 +249,27 @@ export function getSolarTerm(dayNumber, timeZone = 7) {
 export function isHoangDaoDay(lLunarMonth, dayChiIndex) {
 	const lMonthNormalized = (lLunarMonth - 1) % 6;
 	const hoangDaoMatrix = [
-		[0, 1, 5, 7, 10, 11], // Tháng 1, 7: Tý, Sửu, Tỵ, Mùi, Tuất, Hợi
-		[2, 3, 7, 9, 0, 8],   // Tháng 2, 8: Dần, Mão, Mùi, Dậu, Tý, Thân
-		[4, 5, 9, 11, 2, 10],  // Tháng 3, 9: Thìn, Tỵ, Dậu, Hợi, Dần, Tuất
-		[6, 7, 11, 1, 4, 0],   // Tháng 4, 10: Ngọ, Mùi, Hợi, Sửu, Thìn, Tý
-		[8, 9, 1, 3, 6, 2],   // Tháng 5, 11: Thân, Dậu, Sửu, Mão, Ngọ, Dần
-		[10, 11, 3, 5, 8, 4]   // Tháng 6, 12: Tuất, Hợi, Mão, Tỵ, Thân, Thìn
+		[0, 1, 5, 7],      // Tháng 1, 7: Tý, Sửu, Tị, Mùi
+		[2, 3, 7, 9],      // Tháng 2, 8: Dần, Mão, Mùi, Dậu
+		[4, 5, 9, 11],     // Tháng 3, 9: Thìn, Tị, Dậu, Hợi
+		[6, 7, 1, 9],      // Tháng 4, 10: Ngọ, Mùi, Sửu, Dậu
+		[1, 3, 8, 9],      // Tháng 5, 11: Sửu, Mão, Thân, Dậu
+		[3, 5, 10, 11]     // Tháng 6, 12: Mão, Tị, Tuất, Hợi
 	];
 	return hoangDaoMatrix[lMonthNormalized].includes(dayChiIndex);
+}
+
+export function isHacDaoDay(lLunarMonth, dayChiIndex) {
+	const lMonthNormalized = (lLunarMonth - 1) % 6;
+	const hacDaoMatrix = [
+		[6, 3, 11, 9],     // Tháng 1, 7: Ngọ, Mão, Hợi, Dậu
+		[8, 5, 1, 11],     // Tháng 2, 8: Thân, Tị, Sửu, Hợi
+		[10, 7, 1, 11],    // Tháng 3, 9: Tuất, Mùi, Sửu, Hợi
+		[0, 9, 5, 3],      // Tháng 4, 10: Tý, Dậu, Tị, Mão
+		[2, 11, 7, 5],     // Tháng 5, 11: Dần, Hợi, Mùi, Tị
+		[4, 1, 9, 7]       // Tháng 6, 12: Thìn, Sửu, Dậu, Mùi
+	];
+	return hacDaoMatrix[lMonthNormalized].includes(dayChiIndex);
 }
 
 // Solar holidays list
@@ -358,7 +371,8 @@ export function getLunarDayInfo(solarDate, timeZone = 7) {
 	// Day-level Hoang Dao / Hac Dao
 	const dayChiIndex = (jd + 1) % 12;
 	const isHoangDao = isHoangDaoDay(lmm, dayChiIndex);
-	const dayType = isHoangDao ? 'Hoàng Đạo' : 'Hắc Đạo';
+	const isHacDao = isHacDaoDay(lmm, dayChiIndex);
+	const dayType = isHoangDao ? 'Hoàng Đạo' : (isHacDao ? 'Hắc Đạo' : 'Bình thường');
 	
 	const holiday = getHoliday(dd, mm, ldd, lmm, leap === 1, lyy);
 
@@ -380,6 +394,7 @@ export function getLunarDayInfo(solarDate, timeZone = 7) {
 		hoangDaoList,
 		dayType,
 		isHoangDao,
+		isHacDao,
 		holiday,
 		jd
 	};

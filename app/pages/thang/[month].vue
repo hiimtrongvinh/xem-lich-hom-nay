@@ -48,7 +48,7 @@ const hoangDaoDays = computed(() => {
 })
 
 const hacDaoDays = computed(() => {
-  return daysInMonth.value.filter(day => !day.isHoangDao)
+  return daysInMonth.value.filter(day => day.isHacDao)
 })
 
 // Find holidays in current month
