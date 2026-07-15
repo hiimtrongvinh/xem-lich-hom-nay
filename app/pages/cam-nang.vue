@@ -35,7 +35,7 @@ useSeoMeta({
 <template>
   <div class="space-y-8 max-w-5xl mx-auto">
     <div class="text-center space-y-2 max-w-xl mx-auto">
-      <h2 class="text-2xl font-bold text-slate-950 font-serif sm:text-3xl">Cẩm Nang Lịch Pháp</h2>
+      <h2 class="text-2xl font-bold text-slate-950 sm:text-3xl">Cẩm Nang Lịch Pháp</h2>
       <p class="text-slate-500 text-sm">Các bài viết chia sẻ kiến thức, kinh nghiệm xem ngày lành tháng tốt và phong tục truyền thống Việt Nam</p>
     </div>
 

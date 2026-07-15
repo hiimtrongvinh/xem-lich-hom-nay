@@ -162,7 +162,7 @@ function isSpecialLunarDay(day) {
 </script>
 
 <template>
-  <div class="glass-panel rounded-3xl p-6 shadow-xl border border-slate-200">
+  <div class="glass-panel rounded-3xl p-6 shadow-xl border border-slate-200 h-full flex flex-col justify-between">
     <!-- Header Navigation Layout: < Tháng trước | Chọn tháng | Chọn năm | Di chuyển | Tháng sau > -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-slate-200">
       
@@ -221,23 +221,23 @@ function isSpecialLunarDay(day) {
     </div>
 
     <!-- Weekday Headers -->
-    <div class="grid grid-cols-7 gap-1 text-center mb-2">
+    <div class="grid grid-cols-7 gap-1.5 text-center mb-2 justify-items-center">
       <div 
         v-for="header in weekHeaders" 
         :key="header" 
-        class="text-xs font-bold text-slate-500 py-2 uppercase tracking-wider"
+        class="w-10 xs:w-12 sm:w-14 text-center text-xs font-bold text-slate-500 py-2 uppercase tracking-wider"
       >
         {{ header }}
       </div>
     </div>
 
     <!-- Calendar Grid Cells -->
-    <div class="grid grid-cols-7 gap-1.5">
+    <div class="grid grid-cols-7 gap-1.5 justify-items-center">
       <button 
         v-for="(day, index) in gridDays" 
         :key="index"
         @click="selectDay(day)"
-        class="aspect-square rounded-xl p-1 flex flex-col justify-between transition-all border relative"
+        class="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 rounded-xl p-1 flex flex-col justify-between transition-all border relative"
         :class="[
           day.isCurrentMonth ? 'text-slate-800' : 'text-slate-400 border-transparent opacity-30',
           isActive(day.date)
@@ -253,13 +253,13 @@ function isSpecialLunarDay(day) {
         ></span>
 
         <!-- Solar day (big) -->
-        <div class="text-sm font-bold sm:text-base text-left pl-1">
+        <div class="text-sm xs:text-base sm:text-lg font-extrabold text-left pl-1 leading-tight">
           {{ day.dayNum }}
         </div>
 
         <!-- Lunar day (small) -->
         <div 
-          class="text-[10px] text-right pr-1 font-mono font-bold"
+          class="text-[9px] xs:text-[10px] sm:text-xs text-right pr-0.5 font-mono font-bold leading-tight"
           :class="[
             isSpecialLunarDay(day) ? 'text-amber-600 font-bold' : 'text-slate-400'
           ]"

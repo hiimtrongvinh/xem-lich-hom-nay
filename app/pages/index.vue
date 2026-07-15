@@ -151,7 +151,7 @@ function getSolarDateForLunar(lDay, lMonth, sYear) {
     <!-- SECTION 2: Thông tin luận giải chi tiết (Nội dung SEO) -->
     <div class="glass-panel rounded-3xl p-8 border border-slate-200 space-y-6">
       <div class="border-b border-slate-200 pb-4">
-        <h3 class="text-xl font-bold text-slate-900 font-serif flex items-center gap-2">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
           <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
           Luận Giải Chi Tiết Ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
         </h3>
@@ -183,7 +183,7 @@ function getSolarDateForLunar(lDay, lMonth, sYear) {
     </div>
 
     <!-- SECTION 3: Widget đổi ngày âm dương nhanh (Theo đúng sơ đồ cấu trúc của người dùng) -->
-    <div class="glass-panel rounded-3xl p-6 border border-slate-200 max-w-4xl mx-auto space-y-4">
+    <div class="glass-panel rounded-3xl p-6 border border-slate-200 space-y-4">
       
       <!-- HÀNG 1: Tên Widget | Công tắc dương -> âm / âm -> dương -->
       <div class="flex items-center justify-between border-b border-slate-200 pb-3">
@@ -262,7 +262,7 @@ function getSolarDateForLunar(lDay, lMonth, sYear) {
 
     <!-- SECTION 4: Đếm ngược các sự kiện tiếp theo -->
     <div class="space-y-4">
-      <h3 class="text-lg font-bold text-slate-800 font-serif flex items-center gap-2">
+      <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
         <span class="w-1 h-5 bg-red-500 rounded-full"></span>
         Sự kiện Âm lịch sắp tới
       </h3>

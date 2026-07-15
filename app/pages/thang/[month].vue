@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getLunarDayInfo } from '~/utils/lunar'
+import { getLunarDayInfo, solarHolidays, lunarHolidays } from '~/utils/lunar'
 
 const route = useRoute()
 const router = useRouter()
@@ -50,40 +50,6 @@ const hoangDaoDays = computed(() => {
 const hacDaoDays = computed(() => {
   return daysInMonth.value.filter(day => !day.isHoangDao)
 })
-
-// Solar holidays list
-const solarHolidays = [
-  { day: 1, month: 1, name: 'Tết Dương Lịch' },
-  { day: 14, month: 2, name: 'Lễ Tình Nhân (Valentine)' },
-  { day: 8, month: 3, name: 'Ngày Quốc Tế Phụ Nữ' },
-  { day: 26, month: 3, name: 'Ngày Thành Lập Đoàn TNCS Hồ Chí Minh' },
-  { day: 30, month: 4, name: 'Ngày Giải Phóng Miền Nam' },
-  { day: 1, month: 5, name: 'Ngày Quốc Tế Lao Động' },
-  { day: 19, month: 5, name: 'Ngày Sinh Chủ Tịch Hồ Chí Minh' },
-  { day: 1, month: 6, name: 'Ngày Quốc Tế Thiếu Nhi' },
-  { day: 27, month: 7, name: 'Ngày Thương Binh Liệt Sĩ' },
-  { day: 19, month: 8, name: 'Ngày Cách Mạng Tháng Tám Thành Công' },
-  { day: 2, month: 9, name: 'Ngày Quốc Khánh Nước Việt Nam' },
-  { day: 10, month: 10, name: 'Ngày Giải Phóng Thủ Đô' },
-  { day: 20, month: 10, name: 'Ngày Phụ Nữ Việt Nam' },
-  { day: 20, month: 11, name: 'Ngày Nhà Giáo Việt Nam' },
-  { day: 22, month: 12, name: 'Ngày Thành Lập QĐND Việt Nam' },
-  { day: 25, month: 12, name: 'Lễ Giáng Sinh (Noel)' }
-]
-
-// Lunar holidays list
-const lunarHolidays = [
-  { day: 1, month: 1, name: 'Mùng 1 Tết Nguyên Đán' },
-  { day: 2, month: 1, name: 'Mùng 2 Tết Nguyên Đán' },
-  { day: 3, month: 1, name: 'Mùng 3 Tết Nguyên Đán' },
-  { day: 15, month: 1, name: 'Lễ Thượng Nguyên (Rằm Tháng Giêng)' },
-  { day: 10, month: 3, name: 'Giỗ Tổ Hùng Vương' },
-  { day: 15, month: 4, name: 'Lễ Phật Đản (15/4)' },
-  { day: 5, month: 5, name: 'Tết Đoan Ngọ (5/5)' },
-  { day: 15, month: 7, name: 'Lễ Vu Lan (Rằm Tháng Bảy)' },
-  { day: 15, month: 8, name: 'Tết Trung Thu (Rằm Tháng Tám)' },
-  { day: 23, month: 12, name: 'Ngày Ông Táo Chầu Trời' }
-]
 
 // Find holidays in current month
 const holidaysInMonth = computed(() => {
@@ -151,7 +117,7 @@ useSeoMeta({
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto opacity-40 mb-3 text-slate-400">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 15.172a8.959 8.959 0 00-9.75-9.75M11.25 11.25l.041-.02a.75.75 0 11.026.04l-.067-.02z" />
           </svg>
-          <h3 class="font-serif font-bold text-slate-700 text-base mb-1">Tra cứu ngày chi tiết</h3>
+          <h3 class="font-bold text-slate-700 text-base mb-1">Tra cứu ngày chi tiết</h3>
           <p class="text-xs max-w-[240px] leading-relaxed">
             Chọn một ngày bất kỳ từ bảng lịch tháng bên phải để xem luận giải phong thủy chi tiết.
           </p>
@@ -175,7 +141,7 @@ useSeoMeta({
       
       <!-- Good & Bad Days (Left 7 columns) -->
       <div class="lg:col-span-7 glass-panel rounded-3xl p-6 border border-slate-200 space-y-6">
-        <h3 class="text-lg font-bold text-slate-900 font-serif flex items-center gap-2">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
           <span class="w-1 h-5 bg-amber-500 rounded-full"></span>
           Đánh Giá Ngày Tốt & Xấu Trong Tháng {{ monthData.month }}/{{ monthData.year }}
         </h3>
@@ -231,7 +197,7 @@ useSeoMeta({
 
       <!-- Holidays in the month (Right 5 columns) -->
       <div class="lg:col-span-5 glass-panel rounded-3xl p-6 border border-slate-200 flex flex-col">
-        <h3 class="text-lg font-bold text-slate-900 font-serif flex items-center gap-2 mb-4">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
           <span class="w-1 h-5 bg-red-500 rounded-full"></span>
           Ngày Lễ & Sự Kiện Trong Tháng
         </h3>

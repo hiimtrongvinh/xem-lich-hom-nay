@@ -25,9 +25,9 @@ const isDateToday = computed(() => {
     <div class="absolute -right-20 -top-20 w-48 h-48 rounded-full bg-amber-500/5 blur-3xl pointer-events-none"></div>
     <div class="absolute -left-20 -bottom-20 w-48 h-48 rounded-full bg-red-650/5 blur-3xl pointer-events-none"></div>
 
-    <div class="space-y-6 z-10 relative">
-      <!-- Solar Date Header with Corner Label/Button -->
-      <div class="text-center pb-6 border-b border-slate-200 relative">
+    <div class="space-y-4 z-10 relative">
+      <!-- 1. Dương lịch: Thứ, ngày, tháng, năm, nhãn Hôm nay/nút Về hôm nay -->
+      <div class="text-center pb-5 border-b border-slate-200 relative">
         <!-- Corner Label/Button -->
         <div class="absolute top-0 right-0">
           <span 
@@ -46,63 +46,67 @@ const isDateToday = computed(() => {
         </div>
 
         <span class="text-xs font-bold tracking-wider text-amber-600 uppercase block mt-1.5">{{ info.dayOfWeek }}</span>
-        <div class="text-7xl font-extrabold my-2 font-serif tracking-tighter bg-gradient-to-b from-slate-900 to-slate-700 bg-clip-text text-transparent">
+        <div class="text-7xl font-extrabold my-2 tracking-tighter bg-gradient-to-b from-slate-900 to-slate-700 bg-clip-text text-transparent">
           {{ info.solarDay }}
         </div>
         <div class="text-slate-500 font-medium text-sm">
           Tháng {{ info.solarMonth }} / {{ info.solarYear }}
         </div>
-      </div>
 
-      <!-- Lunar Date Information -->
-      <div class="space-y-4">
-        <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase mb-2">Thông tin âm lịch</h3>
-        <div class="flex items-center justify-between bg-slate-50 rounded-2xl p-4 border border-slate-200/60">
-          <div>
-            <div class="text-xs text-slate-500">Ngày âm</div>
-            <div class="text-2xl font-bold text-amber-600 font-serif">
-              {{ info.lunarDay }} <span class="text-xs font-sans font-normal text-slate-500">/ {{ info.lunarMonth }}{{ info.isLeap ? ' nhuận' : '' }}</span>
-            </div>
-          </div>
-          <div class="text-right">
-            <div class="text-[10px] text-slate-500">Tháng (Âm lịch)</div>
-            <div class="text-sm font-semibold text-slate-800">{{ info.monthName }}</div>
-          </div>
-        </div>
-
-        <!-- Can Chi Metadata -->
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-            <span class="text-slate-400 block text-[10px]">Ngày:</span>
-            <span class="font-semibold text-amber-700">{{ info.dayCanChi }}</span>
-          </div>
-          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-            <span class="text-slate-400 block text-[10px]">Tháng:</span>
-            <span class="font-semibold text-slate-700">{{ info.monthCanChi }}</span>
-          </div>
-          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-            <span class="text-slate-400 block text-[10px]">Năm:</span>
-            <span class="font-semibold text-slate-700">{{ info.yearCanChi }}</span>
-          </div>
-          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-            <span class="text-slate-400 block text-[10px]">Tiết khí:</span>
-            <span class="font-semibold text-emerald-600">{{ info.tietKhi }}</span>
-          </div>
+        <!-- Ngày lễ/sự kiện lịch sử (nếu có) - nằm chung khối với dương lịch, trước gạch ranh giới -->
+        <div v-if="info.holiday" class="text-rose-600 text-center font-bold text-xs mt-3 flex items-center justify-center gap-1.5">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+          {{ info.holiday }}
         </div>
       </div>
 
-      <!-- Auspicious Hours -->
-      <div class="space-y-2">
-        <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase">Giờ hoàng đạo</h3>
+      <!-- 3. Âm lịch (ngày/tháng) | Tiết khí -->
+      <div class="flex items-center justify-between text-base py-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-slate-500 font-semibold text-xs sm:text-sm">Lịch Âm:</span>
+          <span class="text-amber-700 font-extrabold text-lg">
+            {{ info.lunarDay }}/{{ info.lunarMonth }}{{ info.isLeap ? ' (Nhuận)' : '' }}
+          </span>
+        </div>
+        <div class="h-5 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-500 font-semibold text-xs sm:text-sm">Tiết khí:</span>
+          <span class="text-emerald-600 font-extrabold text-base">
+            {{ info.tietKhi }}
+          </span>
+        </div>
+      </div>
+
+      <!-- 4. Can chi ngày | tháng | năm -->
+      <div class="flex flex-wrap items-center justify-between py-3 border-b border-slate-100 gap-2">
+        <div class="flex items-center gap-1.5">
+          <span class="text-slate-500 font-semibold text-xs sm:text-sm">Ngày:</span>
+          <span class="text-amber-700 font-extrabold text-sm sm:text-base whitespace-nowrap">{{ info.dayCanChi }}</span>
+        </div>
+        <div class="h-4 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-1.5">
+          <span class="text-slate-500 font-semibold text-xs sm:text-sm">Tháng:</span>
+          <span class="text-slate-700 font-extrabold text-sm sm:text-base whitespace-nowrap">{{ info.monthCanChi }}</span>
+        </div>
+        <div class="h-4 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-1.5">
+          <span class="text-slate-500 font-semibold text-xs sm:text-sm">Năm:</span>
+          <span class="text-slate-700 font-extrabold text-sm sm:text-base whitespace-nowrap">{{ info.yearCanChi }}</span>
+        </div>
+      </div>
+
+      <!-- 5. Giờ hoàng đạo -->
+      <div class="space-y-2.5">
+        <span class="text-xs font-bold tracking-wider text-slate-400 uppercase block">Giờ hoàng đạo</span>
         <div class="flex flex-wrap gap-2">
           <span 
             v-for="item in info.hoangDaoList" 
             :key="item.chiName" 
-            class="text-xs bg-amber-500/10 text-amber-700 border border-amber-500/20 px-2.5 py-1 rounded-lg flex items-center gap-1.5 font-semibold"
+            class="text-xs bg-amber-500/5 hover:bg-amber-500/10 text-amber-700 border border-amber-500/15 px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 font-bold transition-all"
             :title="item.range"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-            {{ item.chiName }} <span class="opacity-60 text-[10px] font-mono">{{ item.range }}</span>
+            {{ item.chiName }} <span class="opacity-60 text-[10px] font-mono font-medium">{{ item.range }}</span>
           </span>
         </div>
       </div>

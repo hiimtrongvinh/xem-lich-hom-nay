@@ -54,7 +54,7 @@ function handleSelectDate(newDate) {
       <!-- Calendar Day Block (Left 5 columns) -->
       <div class="lg:col-span-5 flex flex-col">
         <div class="flex-grow">
-          <CalendarBlock :info="activeLunarInfo" @go-today="handleSelectDate(new Date())" />
+          <CalendarBlock :info="activeLunarInfo" @go-today="router.push('/')" />
         </div>
       </div>
 
@@ -72,7 +72,7 @@ function handleSelectDate(newDate) {
     <!-- SEO Content Section -->
     <div class="glass-panel rounded-3xl p-8 border border-slate-200 space-y-6">
       <div class="border-b border-slate-200 pb-4">
-        <h3 class="text-xl font-bold text-slate-900 font-serif flex items-center gap-2">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
           <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
           Luận Giải Chi Tiết Ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
         </h3>

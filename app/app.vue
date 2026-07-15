@@ -18,7 +18,7 @@ const currentMonthRoute = computed(() => {
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-red-650 flex items-center justify-center shadow-md">
-            <span class="font-bold text-lg text-white font-serif">L</span>
+            <span class="font-bold text-lg text-white">L</span>
           </span>
           <div>
             <h1 class="font-bold text-lg leading-tight text-amber-600">Lịch Vạn Niên</h1>
