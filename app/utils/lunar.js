@@ -285,7 +285,7 @@ export const lunarHolidays = [
   { day: 1, month: 1, name: 'Tết Nguyên Đán (Mùng 1)' },
   { day: 2, month: 1, name: 'Mùng 2 Tết Nguyên Đán' },
   { day: 3, month: 1, name: 'Mùng 3 Tết Nguyên Đán' },
-  { day: 15, month: 1, name: 'Lễ Thượng Nguyên (Rằm Tháng Giêng)' },
+  { day: 15, month: 1, name: 'Tết Nguyên tiêu (Rằm Tháng Giêng)' },
   { day: 10, month: 3, name: 'Giỗ Tổ Hùng Vương' },
   { day: 15, month: 4, name: 'Lễ Phật Đản (15/4)' },
   { day: 5, month: 5, name: 'Tết Đoan Ngọ (5/5)' },
@@ -295,13 +295,34 @@ export const lunarHolidays = [
 ];
 
 /**
+ * Get number of days in lunar month 12 of a specific year
+ */
+function getDaysInLunarMonth12(lunarYear) {
+  const solarNextYearJan1 = convertLunar2Solar(1, 1, lunarYear + 1, 0);
+  const jdNextYearJan1 = jdFromDate(solarNextYearJan1[0], solarNextYearJan1[1], solarNextYearJan1[2]);
+  
+  const solarDec1 = convertLunar2Solar(1, 12, lunarYear, 0);
+  const jdDec1 = jdFromDate(solarDec1[0], solarDec1[1], solarDec1[2]);
+  
+  return jdNextYearJan1 - jdDec1;
+}
+
+/**
  * Get holiday name for a given solar & lunar date
  */
-export function getHoliday(solarDay, solarMonth, lunarDay, lunarMonth, isLeap) {
+export function getHoliday(solarDay, solarMonth, lunarDay, lunarMonth, isLeap, lunarYear) {
   const list = [];
   const sH = solarHolidays.find(h => h.day === solarDay && h.month === solarMonth);
   if (sH) list.push(sH.name);
   if (!isLeap) {
+    // Check for Giao thừa (New Year's Eve) dynamically
+    if (lunarMonth === 12) {
+      const daysInDec = getDaysInLunarMonth12(lunarYear);
+      if ((daysInDec === 29 && lunarDay === 29) || (daysInDec === 30 && lunarDay === 30)) {
+        list.push('Giao thừa');
+      }
+    }
+    
     const lH = lunarHolidays.find(h => h.day === lunarDay && h.month === lunarMonth);
     if (lH) list.push(lH.name);
   }
@@ -339,7 +360,7 @@ export function getLunarDayInfo(solarDate, timeZone = 7) {
 	const isHoangDao = isHoangDaoDay(lmm, dayChiIndex);
 	const dayType = isHoangDao ? 'Hoàng Đạo' : 'Hắc Đạo';
 	
-	const holiday = getHoliday(dd, mm, ldd, lmm, leap === 1);
+	const holiday = getHoliday(dd, mm, ldd, lmm, leap === 1, lyy);
 
 	return {
 		solarDay: dd,

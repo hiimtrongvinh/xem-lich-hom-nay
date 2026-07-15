@@ -220,54 +220,57 @@ function isSpecialLunarDay(day) {
       </button>
     </div>
 
-    <!-- Weekday Headers -->
-    <div class="grid grid-cols-7 gap-1.5 text-center mb-2 justify-items-center">
-      <div 
-        v-for="header in weekHeaders" 
-        :key="header" 
-        class="w-10 xs:w-12 sm:w-14 text-center text-xs font-bold text-slate-500 py-2 uppercase tracking-wider"
-      >
-        {{ header }}
-      </div>
-    </div>
-
-    <!-- Calendar Grid Cells -->
-    <div class="grid grid-cols-7 gap-1.5 justify-items-center">
-      <button 
-        v-for="(day, index) in gridDays" 
-        :key="index"
-        @click="selectDay(day)"
-        class="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 rounded-xl p-1 flex flex-col justify-between transition-all border relative"
-        :class="[
-          day.isCurrentMonth ? 'text-slate-800' : 'text-slate-400 border-transparent opacity-30',
-          isActive(day.date)
-            ? 'glass-card-active border-amber-500/40 text-amber-600 font-semibold' 
-            : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 hover:border-slate-300',
-          isToday(day.date) && !isActive(day.date) ? 'border-red-500/45 bg-red-50/50' : ''
-        ]"
-      >
-        <!-- Today Indicator dot -->
-        <span 
-          v-if="isToday(day.date)" 
-          class="absolute w-1.5 h-1.5 rounded-full bg-red-500 top-1 right-1"
-        ></span>
-
-        <!-- Solar day (big) -->
-        <div class="text-sm xs:text-base sm:text-lg font-extrabold text-left pl-1 leading-tight">
-          {{ day.dayNum }}
-        </div>
-
-        <!-- Lunar day (small) -->
+    <!-- Calendar Body wrapper to center grid elements and remove vertical gaps -->
+    <div class="flex-grow flex flex-col justify-center py-2">
+      <!-- Weekday Headers -->
+      <div class="grid grid-cols-7 gap-1.5 text-center mb-2 justify-items-center">
         <div 
-          class="text-[9px] xs:text-[10px] sm:text-xs text-right pr-0.5 font-mono font-bold leading-tight"
+          v-for="header in weekHeaders" 
+          :key="header" 
+          class="w-10 xs:w-12 sm:w-14 text-center text-xs font-bold text-slate-500 py-2 uppercase tracking-wider"
+        >
+          {{ header }}
+        </div>
+      </div>
+
+      <!-- Calendar Grid Cells -->
+      <div class="grid grid-cols-7 gap-1.5 justify-items-center">
+        <button 
+          v-for="(day, index) in gridDays" 
+          :key="index"
+          @click="selectDay(day)"
+          class="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 rounded-xl p-1 flex flex-col justify-between transition-all border relative"
           :class="[
-            isSpecialLunarDay(day) ? 'text-amber-600 font-bold' : 'text-slate-400'
+            day.isCurrentMonth ? 'text-slate-800' : 'text-slate-400 border-transparent opacity-30',
+            isActive(day.date)
+              ? 'glass-card-active border-amber-500/40 text-amber-600 font-semibold' 
+              : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 hover:border-slate-300',
+            isToday(day.date) && !isActive(day.date) ? 'border-red-500/45 bg-red-50/50' : ''
           ]"
         >
-          <!-- Show Month/Day if it's the 1st of the lunar month -->
-          {{ day.lunar.day === 1 ? `${day.lunar.day}/${day.lunar.month}` : day.lunar.day }}
-        </div>
-      </button>
+          <!-- Today Indicator dot -->
+          <span 
+            v-if="isToday(day.date)" 
+            class="absolute w-1.5 h-1.5 rounded-full bg-red-500 top-1 right-1"
+          ></span>
+
+          <!-- Solar day (big) -->
+          <div class="text-sm xs:text-base sm:text-lg font-extrabold text-left pl-1 leading-tight">
+            {{ day.dayNum }}
+          </div>
+
+          <!-- Lunar day (small) -->
+          <div 
+            class="text-[9px] xs:text-[10px] sm:text-xs text-right pr-0.5 font-mono font-bold leading-tight"
+            :class="[
+              isSpecialLunarDay(day) ? 'text-amber-600 font-bold' : 'text-slate-400'
+            ]"
+          >
+            <!-- Show Month/Day if it's the 1st of the lunar month -->
+            {{ day.lunar.day === 1 ? `${day.lunar.day}/${day.lunar.month}` : day.lunar.day }}
+          </div>
+        </button>
+      </div>
     </div>
   </div>
 </template>

@@ -278,7 +278,7 @@ function getSolarDateForLunar(lDay, lMonth, sYear) {
             <h4 class="font-bold text-sm text-slate-700 mt-1 leading-snug">{{ evt.name }}</h4>
           </div>
           <div class="mt-4 flex items-baseline justify-between">
-            <span class="text-2xl font-black text-amber-500 font-mono">{{ evt.daysLeft }}</span>
+            <span class="text-2xl font-black text-amber-500">{{ evt.daysLeft }}</span>
             <span class="text-slate-400 text-[10px]">ngày ({{ evt.solarStr }})</span>
           </div>
         </div>
