@@ -21,7 +21,7 @@ const currentMonthRoute = computed(() => {
             <span class="font-bold text-lg text-white">L</span>
           </span>
           <div>
-            <h1 class="font-bold text-lg leading-tight text-amber-600">Lịch Vạn Niên</h1>
+            <h1 class="font-bold text-lg leading-tight text-amber-600">Xem lịch hôm nay</h1>
             <p class="text-xs text-slate-500">Xem lịch âm dương hôm nay</p>
           </div>
         </NuxtLink>
@@ -54,8 +54,8 @@ const currentMonthRoute = computed(() => {
     <!-- Footer -->
     <footer class="border-t border-slate-200 bg-white py-8 text-center text-sm text-slate-500">
       <div class="max-w-7xl mx-auto px-4">
-        <p>© 2026 Lịch Vạn Niên Vệ Tinh. Tất cả các quyền được bảo lưu.</p>
-        <p class="text-xs mt-1 text-slate-400">Ứng dụng chạy hoàn toàn phía client không sử dụng cơ sở dữ liệu.</p>
+        <p>Xem lịch hôm nay phát triển bởi Lilytech.</p>
+        <p class="text-xs mt-1 text-slate-400">Phát triển bởi Lilytech.</p>
       </div>
     </footer>
   </div>

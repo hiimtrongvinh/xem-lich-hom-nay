@@ -182,22 +182,25 @@ function isSpecialLunarDay(day) {
         <!-- Month Dropdown -->
         <select 
           v-model="selectedMonth" 
-          class="bg-slate-100 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-2 text-xs font-medium focus:border-amber-500 focus:outline-none transition-colors"
+          class="bg-slate-100 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-2 text-xs font-medium focus:border-amber-500 focus:outline-none transition-colors custom-select"
         >
           <option v-for="(name, index) in monthNames" :key="index" :value="index">
             {{ name }}
           </option>
         </select>
 
-        <!-- Year Dropdown -->
-        <select 
-          v-model="selectedYear" 
-          class="bg-slate-100 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-2 text-xs font-medium focus:border-amber-500 focus:outline-none transition-colors"
-        >
-          <option v-for="y in yearOptions" :key="y" :value="y">
-            Năm {{ y }}
-          </option>
-        </select>
+        <!-- Year Dropdown (Combobox style allowing typing) -->
+        <div class="relative w-24">
+          <input 
+            v-model="selectedYear" 
+            list="years-list"
+            class="w-full bg-slate-100 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-2 text-xs font-medium focus:border-amber-500 focus:outline-none transition-colors custom-select"
+            @change="goToMonthYear"
+          />
+          <datalist id="years-list">
+            <option v-for="y in yearOptions" :key="y" :value="y">Năm {{ y }}</option>
+          </datalist>
+        </div>
 
         <!-- Go Button -->
         <button 

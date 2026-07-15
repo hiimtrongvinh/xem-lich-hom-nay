@@ -90,31 +90,57 @@ const countdowns = computed(() => {
   const today = activeDate.value
   const currentYear = today.getFullYear()
   
-  const events = [
+  const lunarEvents = [
     { name: 'Tết Nguyên Đán (Mùng 1/1)', lDay: 1, lMonth: 1 },
-    { name: 'Rằm tháng Giêng (15/1)', lDay: 15, lMonth: 1 },
+    { name: 'Tết Nguyên tiêu (15/1)', lDay: 15, lMonth: 1 },
     { name: 'Giỗ Tổ Hùng Vương (10/3)', lDay: 10, lMonth: 3 },
     { name: 'Lễ Phật Đản (15/4)', lDay: 15, lMonth: 4 },
-    { name: 'Lễ Đoan Ngọ (5/5)', lDay: 5, lMonth: 5 },
+    { name: 'Tết Đoan Ngọ (5/5)', lDay: 5, lMonth: 5 },
     { name: 'Lễ Vu Lan (Rằm tháng 7)', lDay: 15, lMonth: 7 },
     { name: 'Tết Trung Thu (Rằm tháng 8)', lDay: 15, lMonth: 8 },
     { name: 'Tết Ông Táo (23/12)', lDay: 23, lMonth: 12 }
   ]
+
+  const solarEvents = [
+    { name: 'Tết Dương Lịch', sDay: 1, sMonth: 1 },
+    { name: 'Lễ Tình Nhân (Valentine)', sDay: 14, sMonth: 2 },
+    { name: 'Giải Phóng Miền Nam (30/4)', sDay: 30, sMonth: 4 },
+    { name: 'Quốc Tế Lao Động (1/5)', sDay: 1, sMonth: 5 },
+    { name: 'Quốc Khánh Việt Nam (2/9)', sDay: 2, sMonth: 9 },
+    { name: 'Ngày Nhà Giáo Việt Nam (20/11)', sDay: 20, sMonth: 11 },
+    { name: 'Lễ Giáng Sinh (25/12)', sDay: 25, sMonth: 12 }
+  ]
   
-  const results = events.map(evt => {
+  const results = []
+
+  // Add Lunar countdowns
+  lunarEvents.forEach(evt => {
     let solarDate = getSolarDateForLunar(evt.lDay, evt.lMonth, currentYear)
     if (solarDate < today) {
       solarDate = getSolarDateForLunar(evt.lDay, evt.lMonth, currentYear + 1)
     }
-    
     const timeDiff = solarDate.getTime() - today.getTime()
     const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24))
-    
-    return {
+    results.push({
       name: evt.name,
       daysLeft,
       solarStr: `${solarDate.getDate()}/${solarDate.getMonth() + 1}/${solarDate.getFullYear()}`
+    })
+  })
+
+  // Add Solar countdowns
+  solarEvents.forEach(evt => {
+    let solarDate = new Date(currentYear, evt.sMonth - 1, evt.sDay)
+    if (solarDate < today) {
+      solarDate = new Date(currentYear + 1, evt.sMonth - 1, evt.sDay)
     }
+    const timeDiff = solarDate.getTime() - today.getTime()
+    const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24))
+    results.push({
+      name: evt.name,
+      daysLeft,
+      solarStr: `${solarDate.getDate()}/${solarDate.getMonth() + 1}/${solarDate.getFullYear()}`
+    })
   })
   
   return results.sort((a, b) => a.daysLeft - b.daysLeft)
@@ -124,6 +150,11 @@ function getSolarDateForLunar(lDay, lMonth, sYear) {
   const solar = convertLunar2Solar(lDay, lMonth, sYear, 0)
   return new Date(solar[2], solar[1] - 1, solar[0])
 }
+
+useSeoMeta({
+  title: 'Xem lịch hôm nay - Lịch Âm Dương Vạn Niên',
+  description: 'Tra cứu lịch âm dương hôm nay chính xác nhất, xem ngày hoàng đạo, giờ tốt lành phong thủy và chuyển đổi ngày âm dương nhanh.'
+})
 </script>
 
 <template>
@@ -212,23 +243,38 @@ function getSolarDateForLunar(lDay, lMonth, sYear) {
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <!-- Cột đầu vào (col-span-5) -->
         <div class="md:col-span-5 flex items-center gap-2">
-          <div class="flex-1">
+          <div class="flex-1 relative">
             <label class="text-[9px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Ngày</label>
-            <select v-model="convDay" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500">
-              <option v-for="d in dayOptions" :key="d" :value="d">{{ d }}</option>
-            </select>
+            <input 
+              v-model.number="convDay" 
+              list="conv-days"
+              class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 custom-select"
+            />
+            <datalist id="conv-days">
+              <option v-for="d in dayOptions" :key="d" :value="d" />
+            </datalist>
           </div>
-          <div class="flex-1">
+          <div class="flex-1 relative">
             <label class="text-[9px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Tháng</label>
-            <select v-model="convMonth" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500">
+            <input 
+              v-model.number="convMonth" 
+              list="conv-months"
+              class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 custom-select"
+            />
+            <datalist id="conv-months">
               <option v-for="m in monthOptions" :key="m" :value="m">Tháng {{ m }}</option>
-            </select>
+            </datalist>
           </div>
-          <div class="flex-grow">
+          <div class="flex-grow relative">
             <label class="text-[9px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Năm</label>
-            <select v-model="convYear" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500">
+            <input 
+              v-model.number="convYear" 
+              list="conv-years"
+              class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 custom-select"
+            />
+            <datalist id="conv-years">
               <option v-for="y in yearOptions" :key="y" :value="y">Năm {{ y }}</option>
-            </select>
+            </datalist>
           </div>
         </div>
 
@@ -279,7 +325,7 @@ function getSolarDateForLunar(lDay, lMonth, sYear) {
           </div>
           <div class="mt-4 flex items-baseline justify-between">
             <span class="text-2xl font-black text-amber-500">{{ evt.daysLeft }}</span>
-            <span class="text-slate-400 text-[10px]">ngày ({{ evt.solarStr }})</span>
+            <span class="text-slate-400 text-[10px]">ngày {{ evt.solarStr }}</span>
           </div>
         </div>
       </div>

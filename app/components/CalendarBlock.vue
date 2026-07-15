@@ -98,18 +98,15 @@ const isDateToday = computed(() => {
       <!-- 5. Giờ hoàng đạo -->
       <div class="space-y-2">
         <span class="text-xs font-bold tracking-wider text-slate-400 uppercase block">Giờ hoàng đạo</span>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-3 gap-1.5">
           <span 
             v-for="item in info.hoangDaoList" 
             :key="item.chiName" 
-            class="text-[11px] bg-amber-500/5 hover:bg-amber-500/10 text-amber-700 border border-amber-500/15 py-1.5 rounded-xl flex flex-col items-center justify-center font-bold transition-all text-center leading-none space-y-1"
+            class="text-[10px] sm:text-[11px] bg-amber-500/5 hover:bg-amber-500/10 text-amber-700 border border-amber-500/15 py-1.5 rounded-xl flex items-center justify-center gap-1 font-bold transition-all text-center whitespace-nowrap"
             :title="item.range"
           >
-            <span class="flex items-center gap-1 font-bold">
-              <span class="w-1 h-1 rounded-full bg-amber-500 shrink-0"></span>
-              <span>{{ item.chiName }}</span>
-            </span>
-            <span class="opacity-60 text-[9px] font-medium">{{ item.range }}</span>
+            <span class="w-1 h-1 rounded-full bg-amber-500 shrink-0"></span>
+            <span>{{ item.chiName }} <span class="opacity-60 text-[9px] font-medium">{{ item.range }}</span></span>
           </span>
         </div>
       </div>

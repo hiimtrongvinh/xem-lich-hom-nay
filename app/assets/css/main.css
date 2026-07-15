@@ -48,3 +48,25 @@ body {
   border-color: rgba(245, 158, 11, 0.5) !important;
   box-shadow: 0 0 15px -5px rgba(245, 158, 11, 0.15);
 }
+
+/* Custom dropdown and combobox chevron styling shifted to the left */
+.custom-select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2555/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 10px center !important;
+  background-size: 11px !important;
+  padding-right: 28px !important;
+}
+
+/* Make standard calendar indicator overlay clickable but invisible */
+input::-webkit-calendar-picker-indicator {
+  opacity: 0 !important;
+  position: absolute !important;
+  right: 0 !important;
+  width: 28px !important;
+  height: 100% !important;
+  cursor: pointer !important;
+}
