@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/css/main.css'],
+  app: {
+    baseURL: '/xem-lich-hom-nay/'
+  },
   tailwindcss: {
     config: {
       darkMode: 'class'
