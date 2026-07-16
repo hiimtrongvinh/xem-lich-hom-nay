@@ -1,6 +1,7 @@
 import { convertLunar2Solar, jdFromDate } from './lunar.js';
 
 // Solar holidays list
+// Solar holidays list
 export const solarHolidays = [
 	{ day: 1, month: 1, name: 'Tết Dương Lịch' },
 	{ day: 14, month: 2, name: 'Lễ Tình nhân (Valentine)' },
@@ -36,34 +37,34 @@ export const lunarHolidays = [
 ];
 
 export const HOLIDAY_PARAGRAPHS = {
-	'Tết Dương Lịch': 'Tết Dương Lịch mở đầu cho một năm mới dương lịch tràn đầy hy vọng. Đây là thời khắc mọi người trên thế giới cùng nhau chúc mừng, sum họp gia đình và đề ra những mục tiêu mới cho chặng đường tiếp theo.',
-	'Lễ Tình nhân (Valentine)': 'Lễ Tình nhân (Valentine) là ngày tôn vinh tình yêu đôi lứa. Đây là dịp ngọt ngào để những người yêu nhau thể hiện tình cảm, trao nhau những lời chúc chân thành, đóa hoa hồng hay thanh chocolate ý nghĩa.',
-	'Ngày Quốc tế Phụ nữ': 'Ngày Quốc tế Phụ nữ 8/3 là dịp tôn vinh và gửi lời tri ân sâu sắc đến một nửa thế giới. Ngày này nhắc nhở chúng ta trân trọng vai trò, đóng góp và những cống hiến thầm lặng của người Phụ nữ trong gia đình và xã hội.',
-	'Ngày Thành lập Đoàn Thanh niên Cộng sản Hồ Chí Minh': 'Ngày Thành lập Đoàn Thanh niên Cộng sản Hồ Chí Minh 26/3 tôn vinh sức trẻ, nhiệt huyết và khát vọng cống hiến của thế hệ trẻ Việt Nam, thúc đẩy tinh thần xung kích vì sự phát triển đất nước.',
-	'Ngày Giải phóng miền Nam, thống nhất đất nước': 'Ngày Giải phóng miền Nam, thống nhất đất nước 30/4 là mốc son chói lọi trong lịch sử dân tộc Việt Nam, ngày non sông thu về một mối, đất nước thống nhất. Đây là dịp để tưởng nhớ công ơn của cha ông đã hy sinh vì nền độc lập tự do.',
-	'Ngày Quốc tế Lao động': 'Ngày Quốc tế Lao động 1/5 biểu dương và tôn vinh lực lượng lao động toàn thế giới, ngày của sự đoàn kết và quyền lợi của người lao động trong việc xây dựng và phát triển xã hội.',
-	'Chiến Thắng Điện Biên Phủ': 'Chiến Thắng Điện Biên Phủ 7/5 là chiến thắng lừng lẫy năm châu, chấn động địa cầu, niềm tự hào sâu sắc của quân và dân ta trong cuộc kháng chiến chống thực dân Pháp cứu nước.',
-	'Ngày sinh Chủ Tịch Hồ Chí Minh': 'Ngày sinh Chủ Tịch Hồ Chí Minh 19/5 là dịp cả nước bày tỏ lòng biết ơn vô hạn đối với vị Lãnh tụ kính yêu của dân tộc Việt Nam, người đã hiến dâng cả cuộc đời mình cho sự nghiệp Giải phóng đất nước.',
-	'Ngày Quốc tế Thiếu nhi': 'Ngày Quốc tế Thiếu nhi 1/6 dành trọn tình yêu thương cho trẻ em. Đây là ngày nhắc nhở gia đình và toàn xã hội về việc chăm sóc, bảo vệ và giáo dục mầm non tương lai của đất nước.',
-	'Ngày Thương binh Liệt sĩ': 'Ngày Thương binh Liệt sĩ 27/7 thể hiện đạo lý "Uống nước nhớ nguồn" cao đẹp của người Việt, dịp tri ân sâu sắc các anh hùng thương binh, liệt sĩ đã cống hiến xương máu cho Tổ quốc.',
-	'Cách mạng Tháng Tám Thành Công': 'Ngày kỷ niệm Cách mạng Tháng Tám Thành Công 19/8 đánh dấu cuộc tổng khởi nghĩa oanh liệt của nhân dân ta giành lại chính quyền, mở ra một trang sử mới chói lọi cho dân tộc.',
-	'Ngày Quốc khánh nước Cộng hòa Xã hội Chủ nghĩa Việt Nam': 'Ngày Quốc khánh nước Cộng hòa Xã hội Chủ nghĩa Việt Nam 2/9 kỷ niệm thời khắc Chủ tịch Hồ Chí Minh đọc bản Tuyên ngôn Độc lập tại quảng trường Ba Đình, khai sinh ra nước Việt Nam Dân chủ Cộng hòa.',
-	'Ngày Giải phóng Thủ Đô': 'Ngày Giải phóng Thủ Đô 10/10 đánh dấu cột mốc quân ta tiến về tiếp quản Hà Nội trong niềm hân hoan rợp cờ hoa, mở ra thời kỳ phát triển tự do, yên bình của thủ đô thân yêu.',
-	'Ngày Phụ nữ Việt Nam': 'Ngày Phụ nữ Việt Nam 20/10 nhằm tôn vinh những người mẹ, người chị, người em gái Việt Nam kiên cường, đảm đang, nhân hậu, luôn hy sinh và đóng góp to lớn cho sự nghiệp dựng xây đất nước.',
-	'Ngày Nhà giáo Việt Nam': 'Ngày Nhà giáo Việt Nam 20/11 là ngày hội hiến chương các Nhà giáo, dịp để các thế hệ học trò thể hiện lòng kính trọng và tri ân sâu sắc tinh thần tôn sư trọng đạo đến người thầy, người cô kính yêu.',
-	'Ngày Thành lập Quân đội Nhân dân Việt Nam': 'Ngày Thành lập Quân Đội Nhân Dân Việt Nam 22/12 tôn vinh truyền thống anh dũng của quân đội ta và ngày hội Quốc phòng toàn dân, bảo vệ vững chắc biên cương Tổ quốc.',
-	'Lễ Giáng Sinh (Noel)': 'Lễ Giáng Sinh (Noel) mang không khí ấm áp, an lành đến mọi nhà trên thế giới. Đây là ngày mọi người trao nhau tình yêu thương, những món quà ý nghĩa và lời chúc bình an hạnh phúc.',
-	'Giao thừa': 'Đêm Giao Thừa thiêng liêng xua tan đi những muộn phiền của năm cũ để đón chào năm mới. Đây là thời khắc chuyển giao đất trời, cả gia đình quây quản ấm cúng bên mâm cơm tất niên và làm lễ cúng tiễn đưa cựu tuế.',
-	'Mùng 1 Tết Nguyên đán': 'Mùng 1 Tết Nguyên đán mở đầu cho năm mới âm lịch. Theo phong tục cổ truyền "Mùng 1 Tết cha", đây là ngày gia đình con cháu quây quần chúc Tết bên nội, tỏ lòng hiếu thảo kính trọng đấng sinh thành và cầu mong một năm bình an cát tường.',
-	'Mùng 2 Tết Nguyên đán': 'Mùng 2 Tết Nguyên đán nối tiếp niềm vui đầu năm. Theo tục lệ "Mùng 2 Tết mẹ", đây là dịp cả gia đình hướng về bên ngoại, sum họp chúc Tết họ hàng bên mẹ trong bầu không khí ấm áp, vui tươi gắn kết tình thân.',
-	'Mùng 3 Tết Nguyên đán': 'Mùng 3 Tết Nguyên đán gắn liền với truyền thống hiếu học tôn sư trọng đạo "Mùng 3 Tết thầy". Đây là ngày để các thế hệ học trò đến chúc Tết và bày tỏ lòng biết ơn sâu sắc đến người thầy, người cô đã truyền dạy tri thức cho mình.',
-	'Tết Nguyên tiêu (Rằm Tháng Giêng)': 'Tết Nguyên Tiêu (Rằm Tháng Giêng) là ngày rằm đầu tiên của năm mới, mang ý nghĩa cầu mong may mắn cát tường tràn đầy. Mọi người thường đi lễ chùa, phóng sinh và chuẩn bị mâm cúng chu toàn với quan niệm "Cúng quanh năm không bằng Rằm tháng Giêng".',
-	'Giỗ Tổ Hùng Vương': 'Ngày Giỗ Tổ Hùng Vương mùng 10 tháng 3 âm lịch là quốc giỗ của dân tộc Việt Nam để tưởng nhớ công lao dựng nước của các vua Hùng. Tinh thần hướng về nguồn cội nhắc nhở con cháu Lạc Hồng gìn giữ non sông gấm vóc.',
-	'Lễ Phật Đản (15/4)': 'Lễ Phật Đản rằm tháng Tư âm lịch kỷ niệm ngày Đức Phật Thích Ca Mâu Ni đản sinh. Đây là ngày lễ trọng đại của Phật giáo hướng con người tới tâm thiện lành, từ bi hỷ xả, cầu mong thế giới hòa bình, vạn sinh an lạc.',
-	'Tết Đoan Ngọ (5/5)': 'Tết Đoan Ngọ mùng 5 tháng 5 âm lịch, hay còn gọi là Tết diệt sâu bọ. Theo phong tục, mọi người thường ăn rượu nếp, quả chua vào sáng sớm để xua đuổi bệnh tật, cầu mong sức khỏe dồi dào và mùa màng tươi tốt.',
-	'Lễ Vu Lan (Rằm Tháng Bảy)': 'Lễ Vu Lan báo hiếu rằm tháng Bảy âm lịch là dịp tôn vinh lòng hiếu thảo kính yêu cha mẹ, tưởng nhớ tổ tiên và làm việc thiện tích đức cầu siêu cho vong linh, thể hiện tính nhân văn sâu sắc của đạo lý dân tộc.',
-	'Tết Trung Thu (Rằm Tháng Tám)': 'Tết Trung Thu tức rằm tháng Tám âm lịch là Tết đoàn viên dành cho mọi nhà, đặc biệt là các em Thiếu nhi. Trẻ em rước đèn phá cỗ dưới ánh trăng rằm sáng trong, cả gia đình quây quần bên nhau trong không khí ấm cúng.',
-	'Ngày Ông Táo chầu trời': 'Ngày 23 tháng Chạp là ngày tiễn đưa Ông Công Ông Táo chầu trời để báo cáo mọi việc lớn nhỏ trong nhà của gia chủ suốt năm qua lên Ngọc Hoàng. Phong tục thả cá chép phóng sinh mang ý nghĩa tiễn Táo quân về trời bình an.'
+	'Tết Dương Lịch': 'Thời khắc mở đầu cho một năm mới tràn đầy hy vọng và những khởi đầu mới. Đây là dịp để mọi người trên khắp thế giới sum họp bên gia đình, nhìn lại chặng đường đã qua và cùng nhau đặt ra những mục tiêu bứt phá cho tương lai.',
+	'Lễ Tình nhân (Valentine)': 'Ngày hội ngọt ngào tôn vinh tình yêu đôi lứa trên toàn thế giới. Đây là cơ hội tuyệt vời để bày tỏ tình cảm chân thành với nửa kia bằng những đóa hoa hồng rực rỡ, thanh chocolate ngọt ngào hay những lời yêu thương lãng mạn.',
+	'Ngày Quốc tế Phụ nữ': 'Dịp ý nghĩa để cả xã hội bày tỏ lòng tri ân và tôn vinh vẻ đẹp, sự hy sinh cùng những cống hiến thầm lặng của một nửa thế giới. Ngày này nhắc nhở chúng ta luôn trân trọng, yêu thương người phụ nữ bên cạnh mình.',
+	'Ngày Thành lập Đoàn Thanh niên Cộng sản Hồ Chí Minh': 'Ngày hội của thanh xuân, nhiệt huyết và khát khao cống hiến. Đây là dịp tôn vinh tinh thần xung kích, sáng tạo của thế hệ trẻ Việt Nam trong sự nghiệp xây dựng và bảo vệ Tổ quốc.',
+	'Ngày Giải phóng miền Nam, thống nhất đất nước': 'Cột mốc vàng chói lọi trong lịch sử dân tộc, đánh dấu ngày non sông chính thức nối liền một dải, mở ra kỷ nguyên độc lập, tự do cho đất nước. Đây là lúc thế hệ sau nghiêng mình tưởng nhớ công lao vĩ đại của cha ông.',
+	'Ngày Quốc tế Lao động': 'Ngày hội biểu dương tinh thần đoàn kết và sức mạnh sáng tạo của lực lượng lao động toàn cầu. Đây là dịp khẳng định tầm quan trọng của người lao động trong việc kiến tạo, thúc đẩy sự phát triển thịnh vượng của xã hội.',
+	'Chiến Thắng Điện Biên Phủ': 'Mốc son chói lọi ghi dấu một chiến thắng lừng lẫy năm châu, chấn động địa cầu. Ngày này khơi dậy niềm tự hào dân tộc sâu sắc về tinh thần yêu nước, ý chí tự lực tự cường vững chắc của quân và dân ta.',
+	'Ngày sinh Chủ Tịch Hồ Chí Minh': 'Thời khắc thiêng liêng để mỗi người dân đất Việt hướng về Lãnh tụ kính yêu của dân tộc. Cuộc đời và sự nghiệp vĩ đại của Người luôn là tấm gương sáng ngời, truyền cảm hứng mạnh mẽ cho các thế hệ mai sau.',
+	'Ngày Quốc tế Thiếu nhi': 'Ngày hội tràn đầy tiếng cười của trẻ thơ trên khắp hành tinh. Đây cũng là dịp để gia đình, nhà trường và xã hội cùng nhìn lại, nâng cao trách nhiệm trong việc bảo vệ, chăm sóc và giáo dục mầm non tương lai.',
+	'Ngày Thương binh Liệt sĩ': 'Ngày tri ân thấm đượm đạo lý "Uống nước nhớ nguồn" cao đẹp của dân tộc. Cả nước cùng trang nghiêm tưởng nhớ, bày tỏ lòng biết ơn vô hạn đối với các anh hùng thương binh, liệt sĩ đã hiến dâng xương máu vì nền độc lập tự do của Tổ quốc.',
+	'Cách mạng Tháng Tám Thành Công': 'Sự kiện lịch sử vĩ đại đánh dấu thắng lợi oanh liệt của cuộc tổng khởi nghĩa giành lại độc lập, chủ quyền cho dân tộc. Trang sử hào hùng này đã mở ra một kỷ nguyên mới, kỷ nguyên tự do và tự chủ của người Việt.',
+	'Ngày Quốc khánh nước Cộng hòa Xã hội Chủ nghĩa Việt Nam': 'Ngày Tết Độc Lập thiêng liêng của toàn dân tộc Việt Nam, kỷ niệm thời khắc Chủ tịch Hồ Chí Minh đọc bản Tuyên ngôn Độc lập tại Quảng trường Ba Đình lịch sử, khai sinh ra nước Việt Nam Dân chủ Cộng hòa.',
+	'Ngày Giải phóng Thủ Đô': 'Ngày lịch sử rợp bóng cờ hoa chào đón đoàn quân chiến thắng trở về tiếp quản thủ đô. Cột mốc ý nghĩa này mở ra thời kỳ kiến thiết, phát triển yên bình và rực rỡ của mảnh đất Hà Thành nghìn năm văn hiến.',
+	'Ngày Phụ nữ Việt Nam': 'Dịp đặc biệt để tôn vinh những giá trị truyền thống cao đẹp của người phụ nữ Việt: kiên cường, đảm đang, nhân hậu. Họ chính là hậu phương vững chắc và là những người giữ lửa ấm áp cho mọi nếp nhà.',
+	'Ngày Nhà giáo Việt Nam': 'Ngày hội tri ân sâu sắc truyền thống "Tôn sư trọng đạo" tốt đẹp của dân tộc. Đây là cơ hội để các thế hệ học trò gửi gắm tấm lòng biết ơn, sự kính trọng chân thành đến những "người lái đò" thầm lặng đưa tri thức qua sông.',
+	'Ngày Thành lập Quân đội Nhân dân Việt Nam': 'Ngày tôn vinh hình tượng cao đẹp của anh bộ đội cụ Hồ và truyền thống bách chiến bách thắng của quân đội ta. Đây cũng là ngày hội Quốc phòng toàn dân, khơi dậy lòng yêu nước và ý thức bảo vệ chủ quyền biên cương.',
+	'Lễ Giáng Sinh (Noel)': 'Lễ hội mang không khí ấm áp, an lành lan tỏa khắp mọi nếp nhà. Đây là thời khắc diệu kỳ để mọi người trao đi yêu thương, chia sẻ những món quà ý nghĩa và nguyện cầu một mùa đông yên bình, hạnh phúc.',
+	'Giao thừa': 'Khoảnh khắc thiêng liêng chuyển giao giữa năm cũ và năm mới, xua tan đi những lo toan để chào đón vận hội mới. Cả gia đình quây quần ấm cúng bên mâm cơm tất niên, cùng gửi gắm những ước vọng may mắn, cát tường.',
+	'Mùng 1 Tết Nguyên đán': 'Ngày khởi đầu của năm mới âm lịch, mang đậm nét đẹp văn hóa gia đình phương Đông. Theo phong tục "Mùng 1 Tết cha", đây là thời gian con cháu tề tựu, dâng lời chúc thọ và hiếu kính lên ông bà, cha mẹ bên nội.',
+	'Mùng 2 Tết Nguyên đán': 'Không khí đón xuân tiếp tục rộn ràng trong ngày mùng 2. Gắn liền với tục lệ "Mùng 2 Tết mẹ", cả gia đình cùng hướng về bên ngoại, vun đắp tình thân ấm áp và gửi những lời chúc đầu năm an lành tới họ hàng, người thân.',
+	'Mùng 3 Tết Nguyên đán': 'Ngày mùng 3 hướng về thầy cô kính yêu với tinh thần hiếu học truyền thống "Mùng 3 Tết thầy". Đây là dịp để các thế hệ học trò tụ họp, bày tỏ tấm lòng biết ơn sâu sắc đến những người đã tận tụy dìu dắt mình trên con đường tri thức.',
+	'Tết Nguyên tiêu (Rằm Tháng Giêng)': 'Ngày rằm đầu tiên của năm mới, mang ý nghĩa cầu mong một năm vạn sự hanh thông, cát tường. Với quan niệm "Cúng quanh năm không bằng Rằm tháng Giêng", mọi người thường sắm sửa mâm cúng chu toàn, đi lễ chùa phóng sinh tích đức.',
+	'Giỗ Tổ Hùng Vương': 'Ngày Quốc giỗ thiêng liêng triệu trái tim con hồng cháu lạc cùng hướng về nguồn cội. Tinh thần đoàn kết, biết ơn công lao dựng nước của các vua Hùng luôn là cội nguồn sức mạnh giúp dân tộc ta gìn giữ bền vững giang sơn.',
+	'Lễ Phật Đản (15/4)': 'Đại lễ vô cùng trọng đại của tín đồ Phật giáo khắp thế giới, hướng tâm con người đến các giá trị từ bi hỷ xả, thiện lương. Ngày này nhắc nhở chúng ta sống tốt đời đẹp đạo, cùng cầu nguyện cho nhân loại bình an, vạn sinh cát tường.',
+	'Tết Đoan Ngọ (5/5)': 'Ngày Tết giết sâu bọ độc đáo trong phong tục cổ truyền của người Việt. Mọi người thường ăn rượu nếp, hoa quả chua vào sáng sớm để thanh lọc cơ thể, cầu mong sức khỏe dồi dào, tránh xa bệnh tật và mùa màng thuận lợi.',
+	'Lễ Vu Lan (Rằm Tháng Bảy)': 'Mùa Vu Lan báo hiếu - một nét đẹp nhân văn sâu sắc của văn hóa truyền thống. Đây là thời điểm lắng đọng để mỗi người thể hiện lòng hiếu thảo, tri ân công ơn sinh thành dưỡng dục của cha mẹ và tổ tiên.',
+	'Tết Trung Thu (Rằm Tháng Tám)': 'Ngày Tết đoàn viên rộn rã tiếng cười của mọi gia đình, đặc biệt là các em nhỏ. Dưới ánh trăng rằm sáng tỏ, trẻ em náo nức rước đèn phá cỗ, người lớn quây quần thưởng trà bánh, tận hưởng khoảnh khắc sum họp ấm cúng.',
+	'Ngày Ông Táo chầu trời': 'Nét đẹp văn hóa tâm linh khép lại một năm bận rộn. Gia chủ sắm sửa lễ mâm cúng, thả cá chép phóng sinh để tiễn đưa các vị Táo quân về chầu trời, báo cáo mọi việc lớn nhỏ trong nhà lên Ngọc Hoàng.'
 };
 
 export function getDaysInLunarMonth12(lunarYear) {

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getLunarDayInfo, solarHolidays, lunarHolidays } from '~/utils/lunar'
 
@@ -7,6 +7,7 @@ const route = useRoute()
 const router = useRouter()
 
 const todayState = useState('today-state', () => new Date())
+const activeTab = ref('good')
 
 onMounted(() => {
   todayState.value = new Date()
@@ -110,125 +111,131 @@ useSeoMeta({
   title: () => `Lịch âm tháng ${monthData.value.month} năm ${monthData.value.year} - Xem Ngày Tốt Xấu`,
   description: () => `Tra cứu lịch vạn niên và âm lịch tháng ${monthData.value.month}/${monthData.value.year}. Xem tổng hợp ngày hoàng đạo tốt, ngày hắc đạo, các ngày lễ lớn trong tháng.`
 })
-</script>
-
-<template>
-  <div class="space-y-10 pt-2">
-    <!-- 2-Column Hero Layout matching Home and Day pages -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+</script><template>
+  <div class="space-y-6 pt-2">
+    <!-- 2-Column Layout matching Home and Day pages -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
       
-      <!-- Blank Left Column (Col-span-5) to prevent jumping shift when selecting a day - Hidden on mobile -->
-      <div class="hidden lg:flex lg:col-span-5 flex-col justify-center">
-        <div class="glass-panel rounded-3xl p-8 border border-slate-200 border-dashed text-slate-400 text-center flex flex-col items-center justify-center h-full min-h-[400px]">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto opacity-40 mb-3 text-slate-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 15.172a8.959 8.959 0 00-9.75-9.75M11.25 11.25l.041-.02a.75.75 0 11.026.04l-.067-.02z" />
-          </svg>
-          <h3 class="font-bold text-slate-700 text-base mb-1">Tra cứu ngày chi tiết</h3>
-          <p class="text-xs max-w-[240px] leading-relaxed">
-            Chọn một ngày bất kỳ từ bảng lịch tháng bên phải để xem luận giải phong thủy chi tiết.
-          </p>
+      <!-- Left Column (Col-span-5) - Tabbed Day Summary to prevent scrolling -->
+      <div class="lg:col-span-5 flex flex-col order-2 lg:order-1">
+        <div class="glass-panel rounded-3xl p-5 border border-slate-200 h-full flex flex-col min-h-[440px]">
+          <!-- Title -->
+          <div class="border-b border-slate-100 pb-3 mb-4">
+            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <span class="w-1.5 h-5 bg-amber-500 rounded-full"></span>
+              Tổng Quan Tháng {{ monthData.month }}/{{ monthData.year }}
+            </h3>
+          </div>
+
+          <!-- Tabs Header -->
+          <div class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 mb-4 text-xs font-bold w-full shrink-0">
+            <button 
+              @click="activeTab = 'good'"
+              class="flex-1 py-2 rounded-lg transition-all"
+              :class="activeTab === 'good' ? 'bg-emerald-500 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'"
+            >
+              Ngày Tốt
+            </button>
+            <button 
+              @click="activeTab = 'bad'"
+              class="flex-1 py-2 rounded-lg transition-all"
+              :class="activeTab === 'bad' ? 'bg-rose-500 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'"
+            >
+              Ngày Xấu
+            </button>
+            <button 
+              @click="activeTab = 'holiday'"
+              class="flex-1 py-2 rounded-lg transition-all"
+              :class="activeTab === 'holiday' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-800'"
+            >
+              Ngày Lễ ({{ holidaysInMonth.length }})
+            </button>
+          </div>
+
+          <!-- Tabs Body (Uses flex-grow and overflow-y-auto to avoid page scroll) -->
+          <div class="flex-grow overflow-hidden relative min-h-[280px]">
+            
+            <!-- Ngày Hoàng Đạo Tab -->
+            <div v-show="activeTab === 'good'" class="absolute inset-0 overflow-y-auto pr-1">
+              <div class="grid grid-cols-2 gap-2">
+                <NuxtLink 
+                  v-for="day in hoangDaoDays" 
+                  :key="day.solarDay"
+                  :to="`/ngay/${day.solarYear}-${String(day.solarMonth).padStart(2, '0')}-${String(day.solarDay).padStart(2, '0')}`"
+                  class="block p-2 bg-emerald-50/40 dark:bg-emerald-950/20 hover:bg-emerald-50 border border-emerald-500/10 rounded-xl transition-all"
+                >
+                  <div class="flex items-center justify-between gap-1 flex-wrap">
+                    <span class="font-bold text-xs text-slate-800">Dương: {{ day.solarDay }}/{{ day.solarMonth }}</span>
+                    <span class="text-[9px] text-emerald-600 font-bold bg-emerald-100/50 px-1 py-0.5 rounded shrink-0">
+                      {{ day.dayOfWeek }}
+                    </span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 mt-1 leading-tight">
+                    Âm: {{ day.lunarDay }}/{{ day.lunarMonth }} ({{ day.dayCanChi }})
+                  </div>
+                </NuxtLink>
+              </div>
+            </div>
+
+            <!-- Ngày Hắc Đạo Tab -->
+            <div v-show="activeTab === 'bad'" class="absolute inset-0 overflow-y-auto pr-1">
+              <div class="grid grid-cols-2 gap-2">
+                <NuxtLink 
+                  v-for="day in hacDaoDays" 
+                  :key="day.solarDay"
+                  :to="`/ngay/${day.solarYear}-${String(day.solarMonth).padStart(2, '0')}-${String(day.solarDay).padStart(2, '0')}`"
+                  class="block p-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-all"
+                >
+                  <div class="flex items-center justify-between gap-1 flex-wrap">
+                    <span class="font-bold text-xs text-slate-700">Dương: {{ day.solarDay }}/{{ day.solarMonth }}</span>
+                    <span class="text-[9px] text-rose-600 font-bold bg-rose-100/50 px-1 py-0.5 rounded shrink-0">
+                      {{ day.dayOfWeek }}
+                    </span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-1 leading-tight">
+                    Âm: {{ day.lunarDay }}/{{ day.lunarMonth }} ({{ day.dayCanChi }})
+                  </div>
+                </NuxtLink>
+              </div>
+            </div>
+
+            <!-- Ngày Lễ Tab -->
+            <div v-show="activeTab === 'holiday'" class="absolute inset-0 overflow-y-auto pr-1 space-y-2">
+              <div v-if="holidaysInMonth.length > 0" class="space-y-2">
+                <div 
+                  v-for="h in holidaysInMonth" 
+                  :key="h.name" 
+                  class="flex items-start gap-2.5 p-2 bg-slate-50 border border-slate-200 rounded-xl"
+                >
+                  <span class="w-7 h-7 rounded-lg bg-red-500/10 text-red-500 font-bold text-xs flex items-center justify-center font-mono shrink-0">
+                    {{ String(h.day).padStart(2, '0') }}
+                  </span>
+                  <div>
+                    <h4 class="font-bold text-xs text-slate-800 leading-snug">{{ h.name }}</h4>
+                    <span class="text-[10px] text-slate-400 mt-0.5 block font-medium">{{ h.dateStr }}</span>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-slate-400 text-xs text-center py-10 border border-dashed border-slate-200 rounded-xl">
+                Không có sự kiện lớn nào được liệt kê trong tháng này.
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
       <!-- Monthly Calendar Grid (Right 7 columns) -->
-      <div class="lg:col-span-7 flex flex-col">
+      <div class="lg:col-span-7 flex flex-col order-1 lg:order-2">
         <div class="flex-grow">
           <CalendarGrid 
             :active-date="activeDate" 
+            :has-active-highlight="false"
             @change-view="handleGridChange"
             @select-date="handleSelectDate"
           />
         </div>
       </div>
-    </div>
-
-    <!-- Good / Bad Days and Holidays Summary -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      
-      <!-- Good & Bad Days (Left 7 columns) -->
-      <div class="lg:col-span-7 glass-panel rounded-3xl p-6 border border-slate-200 space-y-6">
-        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-          <span class="w-1 h-5 bg-amber-500 rounded-full"></span>
-          Đánh Giá Ngày Tốt & Xấu Trong Tháng {{ monthData.month }}/{{ monthData.year }}
-        </h3>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-          <!-- Good days (Hoàng Đạo) -->
-          <div class="space-y-3">
-            <h4 class="font-bold text-emerald-600 flex items-center gap-1.5 border-b border-slate-200 pb-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              Ngày Hoàng Đạo (Tốt lành)
-            </h4>
-            <div class="max-h-[300px] overflow-y-auto pr-2 space-y-2">
-              <NuxtLink 
-                v-for="day in hoangDaoDays" 
-                :key="day.solarDay"
-                :to="`/ngay/${day.solarYear}-${String(day.solarMonth).padStart(2, '0')}-${String(day.solarDay).padStart(2, '0')}`"
-                class="block p-2.5 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 rounded-xl transition-all"
-              >
-                <div class="font-semibold text-slate-800">
-                  Dương: {{ day.solarDay }}/{{ day.solarMonth }} - {{ day.dayOfWeek }}
-                </div>
-                <div class="text-xs text-slate-500 mt-0.5">
-                  Âm: {{ day.lunarDay }}/{{ day.lunarMonth }} (Ngày {{ day.dayCanChi }})
-                </div>
-              </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Bad days (Hắc Đạo) -->
-          <div class="space-y-3">
-            <h4 class="font-bold text-rose-600 flex items-center gap-1.5 border-b border-slate-200 pb-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-              Ngày Hắc Đạo (Cần thận trọng)
-            </h4>
-            <div class="max-h-[300px] overflow-y-auto pr-2 space-y-2">
-              <NuxtLink 
-                v-for="day in hacDaoDays" 
-                :key="day.solarDay"
-                :to="`/ngay/${day.solarYear}-${String(day.solarMonth).padStart(2, '0')}-${String(day.solarDay).padStart(2, '0')}`"
-                class="block p-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition-all"
-              >
-                <div class="font-semibold text-slate-700">
-                  Dương: {{ day.solarDay }}/{{ day.solarMonth }} - {{ day.dayOfWeek }}
-                </div>
-                <div class="text-xs text-slate-400 mt-0.5">
-                  Âm: {{ day.lunarDay }}/{{ day.lunarMonth }} (Ngày {{ day.dayCanChi }})
-                </div>
-              </NuxtLink>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Holidays in the month (Right 5 columns) -->
-      <div class="lg:col-span-5 glass-panel rounded-3xl p-6 border border-slate-200 flex flex-col">
-        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
-          <span class="w-1 h-5 bg-red-500 rounded-full"></span>
-          Ngày Lễ & Sự Kiện Trong Tháng
-        </h3>
-        
-        <div v-if="holidaysInMonth.length > 0" class="space-y-3 flex-grow max-h-[360px] overflow-y-auto pr-2">
-          <div 
-            v-for="h in holidaysInMonth" 
-            :key="h.name" 
-            class="flex items-start gap-3 p-3 bg-slate-100/50 border border-slate-200 rounded-xl"
-          >
-            <span class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 font-bold text-sm flex items-center justify-center font-mono">
-              {{ String(h.day).padStart(2, '0') }}
-            </span>
-            <div>
-              <h4 class="font-bold text-sm text-slate-800 leading-snug">{{ h.name }}</h4>
-              <span class="text-[11.5px] text-slate-400 mt-0.5 block">{{ h.dateStr }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div v-else class="text-slate-400 text-sm flex-grow flex items-center justify-center py-10 border border-dashed border-slate-200 rounded-xl">
-          Không có sự kiện lớn nào được liệt kê trong tháng này.
-        </div>
-      </div>
-
     </div>
   </div>
 </template>

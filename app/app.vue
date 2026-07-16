@@ -21,6 +21,11 @@ onUnmounted(() => {
   }
 })
 
+const route = useRoute()
+const isMonthPageActive = computed(() => {
+  return route.path.startsWith('/thang/')
+})
+
 // Current month route for Lịch Tháng
 const currentMonthRoute = computed(() => {
   const y = todayState.value.getFullYear()
@@ -56,7 +61,14 @@ const currentMonthRoute = computed(() => {
         <div class="flex items-center gap-6">
           <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
             <NuxtLink to="/" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Trang chủ</NuxtLink>
-            <NuxtLink :to="currentMonthRoute" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Lịch Tháng</NuxtLink>
+            <NuxtLink 
+              :to="currentMonthRoute" 
+              class="hover:text-amber-600 transition-colors" 
+              :class="{ 'text-amber-600': isMonthPageActive }"
+              active-class="text-amber-600"
+            >
+              Lịch Tháng
+            </NuxtLink>
             <NuxtLink to="/doi-ngay-am-duong" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Đổi Ngày</NuxtLink>
             <NuxtLink to="/cam-nang" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Cẩm Nang</NuxtLink>
           </nav>
@@ -68,7 +80,12 @@ const currentMonthRoute = computed(() => {
         <NuxtLink to="/" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
           <span>Trang chủ</span>
         </NuxtLink>
-        <NuxtLink :to="currentMonthRoute" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
+        <NuxtLink 
+          :to="currentMonthRoute" 
+          class="hover:text-amber-500 flex flex-col items-center gap-0.5" 
+          :class="{ 'text-amber-500': isMonthPageActive }"
+          active-class="text-amber-500"
+        >
           <span>Lịch Tháng</span>
         </NuxtLink>
         <NuxtLink to="/doi-ngay-am-duong" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">

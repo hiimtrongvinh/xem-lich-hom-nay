@@ -1,11 +1,15 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { convertSolar2Lunar, TUAN } from '../utils/lunar'
+import { convertSolar2Lunar, TUAN, isHoangDaoDay, isHacDaoDay, getHoliday } from '../utils/lunar'
 
 const props = defineProps({
   activeDate: {
     type: Date,
     required: true
+  },
+  hasActiveHighlight: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -103,12 +107,23 @@ const gridDays = computed(() => {
 })
 
 function getLunarDayInfo(date) {
-  const lunar = convertSolar2Lunar(date.getDate(), date.getMonth() + 1, date.getFullYear())
+  const sd = date.getDate()
+  const sm = date.getMonth() + 1
+  const sy = date.getFullYear()
+  const lunar = convertSolar2Lunar(sd, sm, sy)
+  const lMonth = lunar[1]
+  const jd = lunar[4]
+  const dayChiIndex = (jd + 1) % 12
+  const lDay = lunar[0]
+  const isLeap = lunar[3] === 1
   return {
-    day: lunar[0],
-    month: lunar[1],
-    isLeap: lunar[3] === 1,
-    jd: lunar[4]
+    day: lDay,
+    month: lMonth,
+    isLeap: isLeap,
+    jd: jd,
+    isHoangDao: isHoangDaoDay(lMonth, dayChiIndex),
+    isHacDao: isHacDaoDay(lMonth, dayChiIndex),
+    isHoliday: !!getHoliday(sd, sm, lDay, lMonth, isLeap)
   }
 }
 
@@ -151,6 +166,7 @@ function isToday(date) {
 }
 
 function isActive(date) {
+  if (!props.hasActiveHighlight) return false
   return date.getDate() === props.activeDate.getDate() &&
          date.getMonth() === props.activeDate.getMonth() &&
          date.getFullYear() === props.activeDate.getFullYear()
@@ -259,7 +275,9 @@ function isSpecialLunarDay(day) {
           @click="selectDay(day)"
           class="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 rounded-xl p-1 flex flex-col justify-between transition-all border relative"
           :class="[
-            day.isCurrentMonth ? 'text-slate-800' : 'text-slate-400 border-transparent opacity-30',
+            day.isCurrentMonth 
+              ? (day.lunar.isHoliday ? 'text-rose-600 font-extrabold' : 'text-slate-800') 
+              : 'text-slate-400 border-transparent opacity-30',
             isActive(day.date)
               ? 'glass-card-active border-amber-500/40 text-amber-600 font-semibold' 
               : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 hover:border-slate-300',
@@ -277,6 +295,13 @@ function isSpecialLunarDay(day) {
             {{ day.dayNum }}
           </div>
 
+          <!-- Indicators Row at bottom-left (Holiday, Hoang Dao, Hac Dao) -->
+          <div class="absolute bottom-1 left-1 sm:left-1.5 flex items-center gap-0.5 pointer-events-none">
+            <span v-if="day.lunar.isHoliday" class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-rose-500"></span>
+            <span v-if="day.lunar.isHoangDao" class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500"></span>
+            <span v-if="day.lunar.isHacDao" class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-slate-400"></span>
+          </div>
+
           <!-- Lunar day (small) -->
           <div 
             class="text-[10.5px] xs:text-[11.5px] sm:text-xs text-right pr-0.5 font-mono font-bold leading-tight"
@@ -288,6 +313,30 @@ function isSpecialLunarDay(day) {
             {{ day.lunar.day === 1 ? `${day.lunar.day}/${day.lunar.month}` : day.lunar.day }}
           </div>
         </button>
+      </div>
+    </div>
+
+    <!-- Calendar Legend (Subtle and Clean) -->
+    <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[10px] sm:text-xs text-slate-500 font-semibold shrink-0">
+      <div class="flex items-center gap-1">
+        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+        <span>Hôm nay</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="w-2 h-2 rounded bg-amber-500/20 border border-amber-500"></span>
+        <span>Đang chọn</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Hoàng đạo</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+        <span>Hắc đạo</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+        <span>Ngày lễ</span>
       </div>
     </div>
   </div>
