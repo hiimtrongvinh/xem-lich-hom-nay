@@ -200,27 +200,36 @@ useSeoMeta({
         <p class="text-xs text-slate-400 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-slate-600">
-        <div class="space-y-4">
-          <p>
-            Ngày dương lịch là ngày <strong>{{ activeLunarInfo.solarDay }} tháng {{ activeLunarInfo.solarMonth }} năm {{ activeLunarInfo.solarYear }}</strong>. 
-            Xét theo âm lịch, đây là ngày <strong>{{ activeLunarInfo.lunarDay }} tháng {{ activeLunarInfo.lunarMonth }}</strong> năm <strong>{{ activeLunarInfo.yearCanChi }}</strong>.
-          </p>
-          <p>
-            Về mặt hệ thống Can Chi, ngày hôm nay là ngày <strong>{{ activeLunarInfo.dayCanChi }}</strong>. 
-            Sự kết hợp giữa thiên can <strong>{{ activeLunarInfo.dayCanChi.split(' ')[0] }}</strong> và địa chi <strong>{{ activeLunarInfo.dayCanChi.split(' ')[1] }}</strong> mang đặc trưng ngũ hành riêng, hỗ trợ đắc lực khi xem tuổi hợp khắc và luận giải các cát tinh tốt lành.
-          </p>
-        </div>
-        <div class="space-y-4">
-          <h4 class="font-semibold text-slate-800 text-base">Khung giờ cát lành hành sự</h4>
-          <p>
-            Các khung giờ hoàng đạo thích hợp để khởi công, đi lại hay thực hiện các ký kết quan trọng trong ngày:
-            <span class="block mt-2 font-semibold text-amber-600">
-              {{ activeLunarInfo.hoangDaoList.map(h => `${h.chiName} (${h.range})`).join(', ') }}.
-            </span>
-            Lựa chọn giờ lành hoàng đạo sẽ giúp mọi sự hanh thông và đem lại kết quả viên mãn nhất cho quý gia chủ.
-          </p>
-        </div>
+      <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600">
+        <!-- Đoạn 1: Dương lịch, âm lịch, can chi, cát hung -->
+        <p>
+          Đây là ngày <strong>{{ activeLunarInfo.solarDay }} tháng {{ activeLunarInfo.solarMonth }} năm {{ activeLunarInfo.solarYear }}</strong> dương lịch, 
+          tức ngày <strong>{{ activeLunarInfo.lunarDay }} tháng {{ activeLunarInfo.lunarMonth }}</strong> âm lịch (ngày {{ activeLunarInfo.monthName }}), 
+          thuộc ngày <strong>{{ activeLunarInfo.dayCanChi }}</strong>, tháng <strong>{{ activeLunarInfo.monthCanChi }}</strong>, năm <strong>{{ activeLunarInfo.yearCanChi }}</strong>. 
+          Đây cũng là ngày <strong>{{ activeLunarInfo.dayType.toLowerCase() }}</strong>, 
+          <span v-if="activeLunarInfo.isHoangDao">quý bản mệnh nên ưu tiên tiến hành các công việc quan trọng như khởi công, động thổ, ký kết hay cưới hỏi để thu hút cát khí tốt lành.</span>
+          <span v-else-if="activeLunarInfo.isHacDao">quý bản mệnh nên hạn chế thực hiện các giao dịch lớn, khai trương hay các việc đại sự để phòng tránh trắc trở phát sinh.</span>
+          <span v-else>quý bản mệnh có thể tiến hành các công việc thường nhật và giao dịch nhỏ một cách bình hòa và suôn sẻ.</span>
+        </p>
+
+        <!-- Đoạn 2 (Nếu có ngày lễ/sự kiện): Mô tả sự kiện -->
+        <p v-if="activeLunarInfo.holidayParagraph" class="bg-rose-50 border-l-4 border-rose-500 p-3.5 rounded-r-xl text-rose-800 font-medium">
+          {{ activeLunarInfo.holidayParagraph }}
+        </p>
+
+        <!-- Đoạn 3: Tiết khí và mô tả hoàn chỉnh -->
+        <p>
+          {{ activeLunarInfo.tietKhiParagraph }}
+        </p>
+        
+        <!-- Đoạn 4: Giờ hoàng đạo và dẫn dắt -->
+        <p>
+          Giờ hoàng đạo trong ngày này bao gồm: 
+          <strong class="text-amber-700">
+            {{ activeLunarInfo.hoangDaoList.map(h => `${h.chiName} (${h.range})`).join(', ') }}
+          </strong>. 
+          Quý bản mệnh chú ý lựa chọn để mọi công việc hanh thông và viên mãn.
+        </p>
       </div>
     </div>
 
@@ -229,7 +238,7 @@ useSeoMeta({
       
       <!-- HÀNG 1: Tên Widget | Công tắc dương -> âm / âm -> dương -->
       <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">ĐỔI NGÀY ÂM DƯƠNG NHANH</h3>
+        <h3 class="text-[12.5px] font-bold text-slate-700 tracking-wider">Đổi ngày âm dương nhanh</h3>
         
         <!-- Switch Button Group -->
         <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">

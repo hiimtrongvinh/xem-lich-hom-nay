@@ -85,27 +85,36 @@ function handleSelectDate(newDate) {
         <p class="text-xs text-slate-400 mt-1">Thông tin luận giải lịch pháp phong thủy theo can chi</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-slate-600">
-        <div class="space-y-4">
-          <p>
-            Ngày dương lịch là ngày <strong>{{ activeLunarInfo.solarDay }} tháng {{ activeLunarInfo.solarMonth }} năm {{ activeLunarInfo.solarYear }}</strong>. 
-            Ngày âm lịch tương ứng là ngày <strong>{{ activeLunarInfo.lunarDay }} tháng {{ activeLunarInfo.lunarMonth }}</strong> năm <strong>{{ activeLunarInfo.yearCanChi }}</strong>.
-          </p>
-          <p>
-            Đây là ngày <strong>{{ activeLunarInfo.dayCanChi }}</strong>. 
-            Mặt Can Chi phản ánh quy luật vận hành của ngũ hành trong ngày, cụ thể là sự phối hợp thiên can <strong>{{ activeLunarInfo.dayCanChi.split(' ')[0] }}</strong> và địa chi <strong>{{ activeLunarInfo.dayCanChi.split(' ')[1] }}</strong>.
-          </p>
-        </div>
-        <div class="space-y-4">
-          <h4 class="font-semibold text-slate-800 text-base">Xem giờ lành hành sự (Giờ Hoàng Đạo)</h4>
-          <p>
-            Trong ngày hôm nay, các khung giờ hoàng đạo cát lợi bao gồm:
-            <span class="block mt-2 font-semibold text-amber-600">
-              {{ activeLunarInfo.hoangDaoList.map(h => `${h.chiName} (${h.range})`).join(', ') }}.
-            </span>
-            Khi thực hiện công việc trọng đại, quý bản mệnh nên cân nhắc chọn các khung giờ này để gặp nhiều may mắn và suôn sẻ.
-          </p>
-        </div>
+      <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600">
+        <!-- Đoạn 1: Dương lịch, âm lịch, can chi, cát hung -->
+        <p>
+          Đây là ngày <strong>{{ activeLunarInfo.solarDay }} tháng {{ activeLunarInfo.solarMonth }} năm {{ activeLunarInfo.solarYear }}</strong> dương lịch, 
+          tức ngày <strong>{{ activeLunarInfo.lunarDay }} tháng {{ activeLunarInfo.lunarMonth }}</strong> âm lịch (ngày {{ activeLunarInfo.monthName }}), 
+          thuộc ngày <strong>{{ activeLunarInfo.dayCanChi }}</strong>, tháng <strong>{{ activeLunarInfo.monthCanChi }}</strong>, năm <strong>{{ activeLunarInfo.yearCanChi }}</strong>. 
+          Đây cũng là ngày <strong>{{ activeLunarInfo.dayType.toLowerCase() }}</strong>, 
+          <span v-if="activeLunarInfo.isHoangDao">quý bản mệnh nên ưu tiên tiến hành các công việc quan trọng như khởi công, động thổ, ký kết hay cưới hỏi để thu hút cát khí tốt lành.</span>
+          <span v-else-if="activeLunarInfo.isHacDao">quý bản mệnh nên hạn chế thực hiện các giao dịch lớn, khai trương hay các việc đại sự để phòng tránh trắc trở phát sinh.</span>
+          <span v-else>quý bản mệnh có thể tiến hành các công việc thường nhật và giao dịch nhỏ một cách bình hòa và suôn sẻ.</span>
+        </p>
+
+        <!-- Đoạn 2 (Nếu có ngày lễ/sự kiện): Mô tả sự kiện -->
+        <p v-if="activeLunarInfo.holidayParagraph" class="bg-rose-50 border-l-4 border-rose-500 p-3.5 rounded-r-xl text-rose-800 font-medium">
+          {{ activeLunarInfo.holidayParagraph }}
+        </p>
+
+        <!-- Đoạn 3: Tiết khí và mô tả hoàn chỉnh -->
+        <p>
+          {{ activeLunarInfo.tietKhiParagraph }}
+        </p>
+        
+        <!-- Đoạn 4: Giờ hoàng đạo và dẫn dắt -->
+        <p>
+          Giờ hoàng đạo trong ngày này bao gồm: 
+          <strong class="text-amber-700">
+            {{ activeLunarInfo.hoangDaoList.map(h => `${h.chiName} (${h.range})`).join(', ') }}
+          </strong>. 
+          Quý bản mệnh chú ý lựa chọn để mọi công việc hanh thông và viên mãn.
+        </p>
       </div>
     </div>
   </div>

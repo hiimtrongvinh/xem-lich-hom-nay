@@ -209,137 +209,12 @@ export function convertLunar2Solar(lunarDay, lunarMonth, lunarYear, lunarLeap, t
 
 export const TUAN = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
 export const THANG = ["Giêng", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy", "Tám", "Chín", "Mười", "Mười Một", "Chạp"];
-export const CAN = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
-export const CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
-export const GIO_HD = ["110100101100", "001101001011", "110011010010", "101100110100", "001011001101", "010010110011"];
-export const TIETKHI = ["Xuân phân", "Thanh minh", "Cốc vũ", "Lập hạ", "Tiểu mãn", "Mang chủng",
-	"Hạ chí", "Tiểu thử", "Đại thử", "Lập thu", "Xử thử", "Bạch lộ",
-	"Thu phân", "Hàn lộ", "Sương giáng", "Lập đông", "Tiểu tuyết", "Đại tuyết",
-	"Đông chí", "Tiểu hàn", "Đại hàn", "Lập xuân", "Vũ Thủy", "Kinh trập"];
-
-export function getYearCanChi(year) {
-	return CAN[(year + 6) % 10] + ' ' + CHI[(year + 8) % 12];
-}
-
-export function getCanHour0(jdn) {
-	return CAN[((jdn - 1) * 2) % 10];
-}
-
-export function getGioHoangDao(jd) {
-	var chiOfDay = (jd + 1) % 12;
-	var gioHD = GIO_HD[chiOfDay % 6];
-	var ret = [];
-	for (var i = 0; i < 12; i++) {
-		if (gioHD.charAt(i) == '1') {
-			const startHour = (i * 2 + 23) % 24;
-			const endHour = (i * 2 + 1) % 24;
-			ret.push({
-				chiName: CHI[i],
-				range: `${startHour}:00 - ${endHour}:00`
-			});
-		}
-	}
-	return ret;
-}
+import { CAN, CHI, getYearCanChi, getCanHour0, getGioHoangDao, isHoangDaoDay, isHacDaoDay } from './lunarAstrology.js';
+import { TIETKHI, TIETKHI_PARAGRAPHS } from './lunarSolarTerms.js';
+import { getHoliday, getDaysInLunarMonth12, solarHolidays, lunarHolidays, HOLIDAY_PARAGRAPHS } from './lunarHolidays.js';
 
 export function getSolarTerm(dayNumber, timeZone = 7) {
 	return INT((SunLongitude(dayNumber - 0.5 - timeZone / 24.0) / PI) * 12);
-}
-
-export function isHoangDaoDay(lLunarMonth, dayChiIndex) {
-	const lMonthNormalized = (lLunarMonth - 1) % 6;
-	const hoangDaoMatrix = [
-		[0, 1, 5, 7],      // Tháng 1, 7: Tý, Sửu, Tị, Mùi
-		[2, 3, 7, 9],      // Tháng 2, 8: Dần, Mão, Mùi, Dậu
-		[4, 5, 9, 11],     // Tháng 3, 9: Thìn, Tị, Dậu, Hợi
-		[6, 7, 1, 9],      // Tháng 4, 10: Ngọ, Mùi, Sửu, Dậu
-		[1, 3, 8, 9],      // Tháng 5, 11: Sửu, Mão, Thân, Dậu
-		[3, 5, 10, 11]     // Tháng 6, 12: Mão, Tị, Tuất, Hợi
-	];
-	return hoangDaoMatrix[lMonthNormalized].includes(dayChiIndex);
-}
-
-export function isHacDaoDay(lLunarMonth, dayChiIndex) {
-	const lMonthNormalized = (lLunarMonth - 1) % 6;
-	const hacDaoMatrix = [
-		[6, 3, 11, 9],     // Tháng 1, 7: Ngọ, Mão, Hợi, Dậu
-		[8, 5, 1, 11],     // Tháng 2, 8: Thân, Tị, Sửu, Hợi
-		[10, 7, 1, 11],    // Tháng 3, 9: Tuất, Mùi, Sửu, Hợi
-		[0, 9, 5, 3],      // Tháng 4, 10: Tý, Dậu, Tị, Mão
-		[2, 11, 7, 5],     // Tháng 5, 11: Dần, Hợi, Mùi, Tị
-		[4, 1, 9, 7]       // Tháng 6, 12: Thìn, Sửu, Dậu, Mùi
-	];
-	return hacDaoMatrix[lMonthNormalized].includes(dayChiIndex);
-}
-
-// Solar holidays list
-export const solarHolidays = [
-  { day: 1, month: 1, name: 'Tết Dương Lịch' },
-  { day: 14, month: 2, name: 'Lễ Tình Nhân (Valentine)' },
-  { day: 8, month: 3, name: 'Ngày Quốc Tế Phụ Nữ' },
-  { day: 26, month: 3, name: 'Ngày Thành Lập Đoàn TNCS Hồ Chí Minh' },
-  { day: 30, month: 4, name: 'Lễ Giải Phóng Miền Nam' },
-  { day: 1, month: 5, name: 'Ngày Quốc Tế Lao Động' },
-  { day: 7, month: 5, name: 'Chiến Thắng Điện Biên Phủ' },
-  { day: 19, month: 5, name: 'Ngày Sinh Chủ Tịch Hồ Chí Minh' },
-  { day: 1, month: 6, name: 'Ngày Quốc Tế Thiếu Nhi' },
-  { day: 27, month: 7, name: 'Ngày Thương Binh Liệt Sĩ' },
-  { day: 19, month: 8, name: 'Cách Mạng Tháng Tám Thành Công' },
-  { day: 2, month: 9, name: 'Ngày Quốc Khánh Nước Việt Nam' },
-  { day: 10, month: 10, name: 'Ngày Giải Phóng Thủ Đô' },
-  { day: 20, month: 10, name: 'Ngày Phụ Nữ Việt Nam' },
-  { day: 20, month: 11, name: 'Ngày Nhà Giáo Việt Nam' },
-  { day: 22, month: 12, name: 'Ngày Thành Lập QĐND Việt Nam' },
-  { day: 25, month: 12, name: 'Lễ Giáng Sinh (Noel)' }
-];
-
-// Lunar holidays list
-export const lunarHolidays = [
-  { day: 1, month: 1, name: 'Tết Nguyên Đán (Mùng 1)' },
-  { day: 2, month: 1, name: 'Mùng 2 Tết Nguyên Đán' },
-  { day: 3, month: 1, name: 'Mùng 3 Tết Nguyên Đán' },
-  { day: 15, month: 1, name: 'Tết Nguyên tiêu (Rằm Tháng Giêng)' },
-  { day: 10, month: 3, name: 'Giỗ Tổ Hùng Vương' },
-  { day: 15, month: 4, name: 'Lễ Phật Đản (15/4)' },
-  { day: 5, month: 5, name: 'Tết Đoan Ngọ (5/5)' },
-  { day: 15, month: 7, name: 'Lễ Vu Lan (Rằm Tháng Bảy)' },
-  { day: 15, month: 8, name: 'Tết Trung Thu (Rằm Tháng Tám)' },
-  { day: 23, month: 12, name: 'Ngày Ông Táo Chầu Trời' }
-];
-
-/**
- * Get number of days in lunar month 12 of a specific year
- */
-function getDaysInLunarMonth12(lunarYear) {
-  const solarNextYearJan1 = convertLunar2Solar(1, 1, lunarYear + 1, 0);
-  const jdNextYearJan1 = jdFromDate(solarNextYearJan1[0], solarNextYearJan1[1], solarNextYearJan1[2]);
-  
-  const solarDec1 = convertLunar2Solar(1, 12, lunarYear, 0);
-  const jdDec1 = jdFromDate(solarDec1[0], solarDec1[1], solarDec1[2]);
-  
-  return jdNextYearJan1 - jdDec1;
-}
-
-/**
- * Get holiday name for a given solar & lunar date
- */
-export function getHoliday(solarDay, solarMonth, lunarDay, lunarMonth, isLeap, lunarYear) {
-  const list = [];
-  const sH = solarHolidays.find(h => h.day === solarDay && h.month === solarMonth);
-  if (sH) list.push(sH.name);
-  if (!isLeap) {
-    // Check for Giao thừa (New Year's Eve) dynamically
-    if (lunarMonth === 12) {
-      const daysInDec = getDaysInLunarMonth12(lunarYear);
-      if ((daysInDec === 29 && lunarDay === 29) || (daysInDec === 30 && lunarDay === 30)) {
-        list.push('Giao thừa');
-      }
-    }
-    
-    const lH = lunarHolidays.find(h => h.day === lunarDay && h.month === lunarMonth);
-    if (lH) list.push(lH.name);
-  }
-  return list.length > 0 ? list.join(' / ') : null;
 }
 
 /**
@@ -349,32 +224,51 @@ export function getLunarDayInfo(solarDate, timeZone = 7) {
 	const dd = solarDate.getDate();
 	const mm = solarDate.getMonth() + 1;
 	const yy = solarDate.getFullYear();
-	
+
 	const lunarDay = convertSolar2Lunar(dd, mm, yy, timeZone);
 	const [ldd, lmm, lyy, leap, jd] = lunarDay;
 
 	const nhuan = leap == 1 ? ' nhuận' : '';
 	const monthName = 'Tháng ' + THANG[lmm - 1] + nhuan;
-	
+
 	const yearCanChi = getYearCanChi(lyy);
 	const monthCanChi = CAN[(lyy * 12 + lmm + 3) % 10] + ' ' + CHI[(lmm + 1) % 12];
 	const dayCanChi = CAN[(jd + 9) % 10] + ' ' + CHI[(jd + 1) % 12];
 	const hourCanChi0 = getCanHour0(jd) + ' ' + CHI[0];
-	
+
 	const termIndex = getSolarTerm(jd + 1, timeZone);
 	const tietKhi = TIETKHI[termIndex];
+	const tietKhiParagraph = TIETKHI_PARAGRAPHS[tietKhi] || "Ngày này rơi vào thời điểm chuyển giao thời tiết trong năm. Quý bản mệnh nên chú ý sinh hoạt điều độ, giữ tâm lý thoải mái và ăn uống đầy đủ dưỡng chất để bảo vệ sức đề kháng.";
 	const hoangDaoList = getGioHoangDao(jd);
-	
+
 	// Day of week
 	const dayOfWeek = TUAN[solarDate.getDay()];
-	
+
 	// Day-level Hoang Dao / Hac Dao
 	const dayChiIndex = (jd + 1) % 12;
 	const isHoangDao = isHoangDaoDay(lmm, dayChiIndex);
 	const isHacDao = isHacDaoDay(lmm, dayChiIndex);
-	const dayType = isHoangDao ? 'Hoàng Đạo' : (isHacDao ? 'Hắc Đạo' : 'Bình thường');
-	
-	const holiday = getHoliday(dd, mm, ldd, lmm, leap === 1, lyy);
+	const dayType = isHoangDao ? 'Hoàng đạo' : (isHacDao ? 'Hắc đạo' : 'Bình thường');
+
+	// Calculate holiday & holidayParagraph
+	const holidayNames = [];
+	const sH = solarHolidays.find(h => h.day === dd && h.month === mm);
+	if (sH) holidayNames.push(sH.name);
+	if (leap !== 1) {
+		if (lmm === 12) {
+			const daysInDec = getDaysInLunarMonth12(lyy);
+			if ((daysInDec === 29 && ldd === 29) || (daysInDec === 30 && ldd === 30)) {
+				holidayNames.push('Giao thừa');
+			}
+		}
+		const lH = lunarHolidays.find(h => h.day === ldd && h.month === lmm);
+		if (lH) holidayNames.push(lH.name);
+	}
+	const holiday = holidayNames.length > 0 ? holidayNames.join(' / ') : null;
+	const holidayParagraph = holidayNames
+		.map(name => HOLIDAY_PARAGRAPHS[name])
+		.filter(Boolean)
+		.join(' ');
 
 	return {
 		solarDay: dd,
@@ -391,13 +285,17 @@ export function getLunarDayInfo(solarDate, timeZone = 7) {
 		dayCanChi,
 		hourCanChi0,
 		tietKhi,
+		tietKhiParagraph,
 		hoangDaoList,
 		dayType,
 		isHoangDao,
 		isHacDao,
 		holiday,
+		holidayParagraph,
 		jd
 	};
 }
 
 export { jdFromDate, jdToDate };
+export { CAN, CHI, getYearCanChi, getCanHour0, getGioHoangDao, isHoangDaoDay, isHacDaoDay } from './lunarAstrology.js';
+export { getHoliday, getDaysInLunarMonth12, solarHolidays, lunarHolidays, HOLIDAY_PARAGRAPHS } from './lunarHolidays.js';
