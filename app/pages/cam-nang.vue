@@ -35,8 +35,8 @@ useSeoMeta({
 <template>
   <div class="space-y-8 max-w-5xl mx-auto">
     <div class="text-center space-y-2 max-w-xl mx-auto">
-      <h2 class="text-2xl font-bold text-slate-950 sm:text-3xl">Cẩm Nang Lịch Pháp</h2>
-      <p class="text-slate-500 text-sm">Các bài viết chia sẻ kiến thức, kinh nghiệm xem ngày lành tháng tốt và phong tục truyền thống Việt Nam</p>
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">Cẩm Nang Lịch Pháp</h2>
+      <p class="text-slate-500 dark:text-slate-400 text-sm">Các bài viết chia sẻ kiến thức, kinh nghiệm xem ngày lành tháng tốt và phong tục truyền thống Việt Nam</p>
     </div>
 
     <!-- Articles Grid -->
@@ -44,25 +44,25 @@ useSeoMeta({
       <div 
         v-for="article in articles" 
         :key="article.title" 
-        class="glass-panel glass-panel-hover rounded-3xl p-6 border border-slate-200 flex flex-col justify-between space-y-4"
+        class="glass-panel glass-panel-hover rounded-3xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4"
       >
         <div class="space-y-2">
           <div class="flex items-center justify-between text-xs">
             <span class="text-amber-600 font-bold bg-amber-500/10 px-2.5 py-1 rounded-lg">
               {{ article.category }}
             </span>
-            <span class="text-slate-400 font-mono">{{ article.date }}</span>
+            <span class="text-slate-400 dark:text-slate-500 font-mono">{{ article.date }}</span>
           </div>
-          <h3 class="text-base font-bold text-slate-900 leading-snug hover:text-amber-600 cursor-pointer transition-colors">
+          <h3 class="text-base font-bold text-slate-900 dark:text-slate-200 leading-snug hover:text-amber-600 cursor-pointer transition-colors">
             {{ article.title }}
           </h3>
-          <p class="text-xs text-slate-500 leading-relaxed">
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             {{ article.summary }}
           </p>
         </div>
 
-        <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
-          <span class="text-slate-400">Người đăng: Ban Biên Tập</span>
+        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+          <span class="text-slate-400 dark:text-slate-500">Người đăng: Ban Biên Tập</span>
           <button class="text-amber-600 font-semibold hover:underline flex items-center gap-1">
             Đọc bài viết
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
@@ -74,7 +74,7 @@ useSeoMeta({
     </div>
 
     <!-- Stub Info Alert -->
-    <div class="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-4 text-center text-xs text-amber-700 max-w-xl mx-auto">
+    <div class="bg-amber-500/5 border border-amber-500/20 dark:border-amber-500/30 rounded-2xl p-4 text-center text-xs text-amber-700 dark:text-amber-400 max-w-xl mx-auto">
       <strong>Lưu ý:</strong> Mục cẩm nang đang trong quá trình chuẩn bị bài viết và sẽ tích hợp hệ thống bài viết tĩnh ở giai đoạn tiếp theo.
     </div>
   </div>

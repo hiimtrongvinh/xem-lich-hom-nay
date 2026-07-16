@@ -3,6 +3,19 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const todayState = useState('today-state', () => new Date())
 const isScrolled = ref(false)
+const isDark = ref(false)
+
+function applyDark(value) {
+  if (typeof document !== 'undefined') {
+    document.documentElement.classList.toggle('dark', value)
+    localStorage.setItem('theme', value ? 'dark' : 'light')
+  }
+}
+
+function toggleDark() {
+  isDark.value = !isDark.value
+  applyDark(isDark.value)
+}
 
 const handleScroll = () => {
   if (typeof window !== 'undefined') {
@@ -13,6 +26,14 @@ const handleScroll = () => {
 onMounted(() => {
   todayState.value = new Date()
   window.addEventListener('scroll', handleScroll, { passive: true })
+  // Restore saved preference or follow system preference
+  const saved = localStorage.getItem('theme')
+  if (saved) {
+    isDark.value = saved === 'dark'
+  } else {
+    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+  applyDark(isDark.value)
 })
 
 onUnmounted(() => {
@@ -35,9 +56,9 @@ const currentMonthRoute = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-amber-500/30 selection:text-amber-900">
+  <div class="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-amber-500/30 selection:text-amber-900 transition-colors duration-300">
     <!-- Header / Nav Wrapper sticky at top -->
-    <header class="sticky top-0 z-50 bg-white/95 border-b border-slate-200 shadow-sm transition-all duration-300">
+    <header class="sticky top-0 z-50 bg-white/95 dark:bg-slate-950/95 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
       
       <!-- Logo Container (Collapses on scroll on mobile) -->
       <div 
@@ -53,13 +74,13 @@ const currentMonthRoute = computed(() => {
           </span>
           <div class="text-left">
             <h1 class="font-bold text-base sm:text-lg leading-tight text-amber-600">Xem lịch hôm nay</h1>
-            <p class="text-[10px] sm:text-xs text-slate-500">Xem lịch âm dương hôm nay</p>
+            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Xem lịch âm dương hôm nay</p>
           </div>
         </NuxtLink>
 
         <!-- Desktop Navigation Links (hidden on mobile) -->
-        <div class="flex items-center gap-6">
-          <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
+        <div class="flex items-center gap-4">
+          <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600 dark:text-slate-300">
             <NuxtLink to="/" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Trang chủ</NuxtLink>
             <NuxtLink 
               :to="currentMonthRoute" 
@@ -72,11 +93,35 @@ const currentMonthRoute = computed(() => {
             <NuxtLink to="/doi-ngay-am-duong" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Đổi Ngày</NuxtLink>
             <NuxtLink to="/cam-nang" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Cẩm Nang</NuxtLink>
           </nav>
+
+          <!-- Dark/Light Toggle Button -->
+          <button
+            @click="toggleDark"
+            class="w-9 h-9 rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/30 text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-200 shrink-0"
+            :title="isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'"
+          >
+            <!-- Moon icon (show when light) -->
+            <svg v-if="!isDark" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <!-- Sun icon (show when dark) -->
+            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
         </div>
       </div>
 
       <!-- Mobile Nav Bar (Sticky, always showing the 4 functions, right below logo/collapses to top-0 when scrolled) -->
-      <div class="md:hidden border-t border-slate-100 bg-white text-xs font-bold py-2.5 px-4 flex justify-around text-slate-500 transition-all duration-300">
+      <div class="md:hidden border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 text-xs font-bold py-2.5 px-4 flex justify-around text-slate-500 dark:text-slate-400 transition-all duration-300">
         <NuxtLink to="/" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
           <span>Trang chủ</span>
         </NuxtLink>
@@ -94,6 +139,27 @@ const currentMonthRoute = computed(() => {
         <NuxtLink to="/cam-nang" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
           <span>Cẩm Nang</span>
         </NuxtLink>
+        <!-- Dark/Light Toggle on mobile -->
+        <button
+          @click="toggleDark"
+          class="hover:text-amber-500 flex flex-col items-center gap-0.5 transition-colors"
+        >
+          <svg v-if="!isDark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <span>{{ isDark ? 'Sáng' : 'Tối' }}</span>
+        </button>
       </div>
     </header>
 
@@ -103,8 +169,8 @@ const currentMonthRoute = computed(() => {
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 bg-white py-8 text-center text-sm text-slate-500">
-      <p class="font-medium text-slate-700">
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-8 text-center text-sm text-slate-500 dark:text-slate-400">
+      <p class="font-medium text-slate-700 dark:text-slate-300">
       © 2026 Xem Lịch Hôm Nay. 
       <span class="text-slate-500 font-normal">| Phát triển bởi 
         <a href="https://lilytech.com.vn/" target="_blank" rel="noopener" class="text-amber-600 hover:underline font-semibold">Lilytech</a>
@@ -118,3 +184,4 @@ const currentMonthRoute = computed(() => {
     </footer>
   </div>
 </template>
+

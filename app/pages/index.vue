@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getLunarDayInfo, convertLunar2Solar, convertSolar2Lunar, getYearCanChi, THANG } from '~/utils/lunar'
+import { getLunarDayInfo, convertLunar2Solar, convertSolar2Lunar, getYearCanChi, THANG, solarHolidays, lunarHolidays } from '~/utils/lunar'
 
 const router = useRouter()
 
@@ -105,34 +105,13 @@ const countdowns = computed(() => {
   const today = activeDate.value
   const currentYear = today.getFullYear()
   
-  const lunarEvents = [
-    { name: 'Tết Nguyên Đán (Mùng 1/1)', lDay: 1, lMonth: 1 },
-    { name: 'Tết Nguyên tiêu (15/1)', lDay: 15, lMonth: 1 },
-    { name: 'Giỗ Tổ Hùng Vương (10/3)', lDay: 10, lMonth: 3 },
-    { name: 'Lễ Phật Đản (15/4)', lDay: 15, lMonth: 4 },
-    { name: 'Tết Đoan Ngọ (5/5)', lDay: 5, lMonth: 5 },
-    { name: 'Lễ Vu Lan (Rằm tháng 7)', lDay: 15, lMonth: 7 },
-    { name: 'Tết Trung Thu (Rằm tháng 8)', lDay: 15, lMonth: 8 },
-    { name: 'Tết Ông Táo (23/12)', lDay: 23, lMonth: 12 }
-  ]
-
-  const solarEvents = [
-    { name: 'Tết Dương Lịch', sDay: 1, sMonth: 1 },
-    { name: 'Lễ Tình Nhân (Valentine)', sDay: 14, sMonth: 2 },
-    { name: 'Giải Phóng Miền Nam (30/4)', sDay: 30, sMonth: 4 },
-    { name: 'Quốc Tế Lao Động (1/5)', sDay: 1, sMonth: 5 },
-    { name: 'Quốc Khánh Việt Nam (2/9)', sDay: 2, sMonth: 9 },
-    { name: 'Ngày Nhà Giáo Việt Nam (20/11)', sDay: 20, sMonth: 11 },
-    { name: 'Lễ Giáng Sinh (25/12)', sDay: 25, sMonth: 12 }
-  ]
-  
   const results = []
 
   // Add Lunar countdowns
-  lunarEvents.forEach(evt => {
-    let solarDate = getSolarDateForLunar(evt.lDay, evt.lMonth, currentYear)
+  lunarHolidays.forEach(evt => {
+    let solarDate = getSolarDateForLunar(evt.day, evt.month, currentYear)
     if (solarDate < today) {
-      solarDate = getSolarDateForLunar(evt.lDay, evt.lMonth, currentYear + 1)
+      solarDate = getSolarDateForLunar(evt.day, evt.month, currentYear + 1)
     }
     const timeDiff = solarDate.getTime() - today.getTime()
     const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24))
@@ -144,10 +123,10 @@ const countdowns = computed(() => {
   })
 
   // Add Solar countdowns
-  solarEvents.forEach(evt => {
-    let solarDate = new Date(currentYear, evt.sMonth - 1, evt.sDay)
+  solarHolidays.forEach(evt => {
+    let solarDate = new Date(currentYear, evt.month - 1, evt.day)
     if (solarDate < today) {
-      solarDate = new Date(currentYear + 1, evt.sMonth - 1, evt.sDay)
+      solarDate = new Date(currentYear + 1, evt.month - 1, evt.day)
     }
     const timeDiff = solarDate.getTime() - today.getTime()
     const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24))
@@ -195,16 +174,16 @@ useSeoMeta({
     </div>
 
     <!-- SECTION 2: Thông tin luận giải chi tiết (Nội dung SEO) -->
-    <div class="glass-panel rounded-3xl p-8 border border-slate-200 space-y-6">
-      <div class="border-b border-slate-200 pb-4">
-        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+    <div class="glass-panel rounded-3xl p-8 border border-slate-200 dark:border-slate-800 space-y-6">
+      <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
           Luận giải chi tiết ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
         </h3>
-        <p class="text-sm text-slate-400 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
+        <p class="text-sm text-slate-400 dark:text-slate-500 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
       </div>
 
-      <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600">
+      <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600 dark:text-slate-300">
         <p>
           Đây là ngày <strong>{{ activeLunarInfo.solarDay }} tháng {{ activeLunarInfo.solarMonth }} năm {{ activeLunarInfo.solarYear }}</strong> dương lịch, 
           tức ngày <strong>{{ activeLunarInfo.lunarDay }} tháng {{ activeLunarInfo.lunarMonth }}</strong> âm lịch (ngày {{ activeLunarInfo.monthName }}), 
@@ -215,7 +194,7 @@ useSeoMeta({
           <span v-else>quý bản mệnh có thể tiến hành các công việc thường nhật và giao dịch nhỏ một cách bình hòa và suôn sẻ.</span>
         </p>
 
-        <p v-if="activeLunarInfo.holidayParagraph" class="bg-rose-50 border-l-4 border-rose-500 p-3.5 rounded-r-xl text-rose-800 font-medium">
+        <p v-if="activeLunarInfo.holidayParagraph" class="bg-rose-50 dark:bg-rose-950/30 border-l-4 border-rose-500 p-3.5 rounded-r-xl text-rose-800 dark:text-rose-300 font-medium">
           {{ activeLunarInfo.holidayParagraph }}
         </p>
 
@@ -225,7 +204,7 @@ useSeoMeta({
         
         <p>
           Giờ hoàng đạo trong ngày này bao gồm: 
-          <strong class="text-amber-700">
+          <strong class="text-amber-700 dark:text-amber-400">
             {{ activeLunarInfo.hoangDaoList.map(h => `${h.chiName} (${h.range})`).join(', ') }}
           </strong>. 
           Quý bản mệnh chú ý lựa chọn để mọi công việc hanh thông và viên mãn.
@@ -234,25 +213,25 @@ useSeoMeta({
     </div>
 
     <!-- SECTION 3: Widget đổi ngày âm dương nhanh (Đầu vào, Đầu ra, Nút Chi tiết trên 1 hàng ngang) -->
-    <div class="glass-panel rounded-3xl p-5 border border-slate-200 space-y-3">
+    <div class="glass-panel rounded-3xl p-5 border border-slate-200 dark:border-slate-800 space-y-3">
       
       <!-- HÀNG 1: Tên Widget | Công tắc dương -> âm / âm -> dương -->
-      <div class="flex items-center justify-between border-b border-slate-150 pb-2.5">
-        <h3 class="text-lg font-bold text-slate-700 tracking-wide">Đổi ngày âm dương nhanh</h3>
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+        <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 tracking-wide">Đổi ngày âm dương nhanh</h3>
         
         <!-- Switch Button Group -->
-        <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+        <div class="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
           <button 
             @click="isSolarToLunar = true" 
             class="px-3 py-1 rounded-md text-[11px] font-bold transition-all"
-            :class="isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500'"
+            :class="isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500 dark:text-slate-400'"
           >
             Dương lịch → Âm lịch
           </button>
           <button 
             @click="isSolarToLunar = false" 
             class="px-3 py-1 rounded-md text-[11px] font-bold transition-all"
-            :class="!isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500'"
+            :class="!isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500 dark:text-slate-400'"
           >
             Âm lịch → Dương lịch
           </button>
@@ -260,7 +239,7 @@ useSeoMeta({
       </div>
 
       <!-- HÀNG 2: Đầu vào, Đầu ra và Nút Chi tiết trên cùng 1 hàng ngang -->
-      <div class="flex flex-col xl:flex-row items-center justify-between gap-4 w-full bg-white dark:bg-slate-950">
+      <div class="flex flex-col xl:flex-row items-center justify-between gap-4 w-full">
         
         <!-- Tổ hợp Đầu vào + Mũi tên + Đầu ra -->
         <div class="flex flex-col sm:flex-row items-center gap-3 w-full xl:w-auto justify-center xl:justify-start">
@@ -269,29 +248,29 @@ useSeoMeta({
           <div class="flex items-center gap-2 shrink-0">
             <!-- Ngày -->
             <div class="flex items-center gap-1">
-              <span class="text-sm text-slate-500 font-medium">Ngày</span>
+              <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">Ngày</span>
               <input 
                 v-model.number="convDay" 
                 list="conv-days"
-                class="w-12 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                class="w-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
               />
             </div>
             <!-- Tháng -->
             <div class="flex items-center gap-1">
-              <span class="text-sm text-slate-500 font-medium">Tháng</span>
+              <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">Tháng</span>
               <input 
                 v-model.number="convMonth" 
                 list="conv-months"
-                class="w-12 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                class="w-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
               />
             </div>
             <!-- Năm -->
             <div class="flex items-center gap-1">
-              <span class="text-sm text-slate-500 font-medium">Năm</span>
+              <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">Năm</span>
               <input 
                 v-model.number="convYear" 
                 list="conv-years"
-                class="w-20 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                class="w-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
               />
             </div>
           </div>
@@ -307,7 +286,7 @@ useSeoMeta({
           <div v-if="convResult.success" class="flex items-center gap-2 shrink-0">
             <!-- Ngày -->
             <div class="flex items-center gap-1">
-              <span class="text-sm text-slate-400 font-medium">Ngày</span>
+              <span class="text-sm text-slate-400 dark:text-slate-500 font-medium">Ngày</span>
               <input 
                 readonly 
                 :value="String(convResult.outDay).padStart(2, '0')"
@@ -316,7 +295,7 @@ useSeoMeta({
             </div>
             <!-- Tháng -->
             <div class="flex items-center gap-1">
-              <span class="text-sm text-slate-400 font-medium">Tháng</span>
+              <span class="text-sm text-slate-400 dark:text-slate-500 font-medium">Tháng</span>
               <input 
                 readonly 
                 :value="String(convResult.outMonth).padStart(2, '0')"
@@ -325,7 +304,7 @@ useSeoMeta({
             </div>
             <!-- Năm -->
             <div class="flex items-center gap-1">
-              <span class="text-sm text-slate-400 font-medium">Năm</span>
+              <span class="text-sm text-slate-400 dark:text-slate-500 font-medium">Năm</span>
               <input 
                 readonly 
                 :value="convResult.outYear"
@@ -356,7 +335,7 @@ useSeoMeta({
 
     <!-- SECTION 4: Đếm ngược các sự kiện tiếp theo -->
     <div class="space-y-4">
-      <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+      <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
         <span class="w-1 h-5 bg-red-500 rounded-full"></span>
         Sự kiện sắp tới
       </h3>
@@ -365,15 +344,19 @@ useSeoMeta({
         <div 
           v-for="evt in countdowns.slice(0, 4)" 
           :key="evt.name" 
-          class="glass-panel glass-panel-hover rounded-2xl p-5 border border-slate-200 flex flex-col justify-between"
+          class="glass-panel glass-panel-hover rounded-2xl p-5 border border-slate-200 dark:border-slate-800 flex flex-col justify-between min-h-[140px]"
         >
           <div>
-            <span class="text-xs text-slate-400 block">Đếm ngược sự kiện</span>
-            <h4 class="font-bold text-sm text-slate-700 mt-1 leading-snug">{{ evt.name }}</h4>
+            <!-- Tên ngày lễ/sự kiện (chữ vừa in đậm) -->
+            <h4 class="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 leading-snug">{{ evt.name }}</h4>
+            <!-- Ngày dương lịch (chữ nhỏ) -->
+            <span class="text-[11.5px] text-slate-400 dark:text-slate-500 block mt-1">Dương lịch: {{ evt.solarStr }}</span>
           </div>
-          <div class="mt-4 flex items-baseline justify-between">
-            <span class="text-2xl font-black text-amber-500">{{ evt.daysLeft }}</span>
-            <span class="text-slate-400 text-[11.5px]">ngày {{ evt.solarStr }}</span>
+          <!-- Còn N ngày. (N chữ lớn màu vàng) -->
+          <div class="mt-4 flex items-baseline gap-1.5 text-slate-600 dark:text-slate-400 text-sm font-bold">
+            <span>Còn</span>
+            <span class="text-3xl font-black text-amber-500 leading-none">{{ evt.daysLeft }}</span>
+            <span>ngày.</span>
           </div>
         </div>
       </div>

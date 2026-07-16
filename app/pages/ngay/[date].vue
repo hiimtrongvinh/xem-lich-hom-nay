@@ -76,16 +76,16 @@ function handleSelectDate(newDate) {
     </div>
 
     <!-- SEO Content Section -->
-    <div class="glass-panel rounded-3xl p-8 border border-slate-200 space-y-6">
-      <div class="border-b border-slate-200 pb-4">
-        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+    <div class="glass-panel rounded-3xl p-8 border border-slate-200 dark:border-slate-800 space-y-6">
+      <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
           Luận giải chi tiết ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
         </h3>
-        <p class="text-xs text-slate-400 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
+        <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
       </div>
 
-      <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600">
+      <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600 dark:text-slate-300">
         <!-- Đoạn 1: Dương lịch, âm lịch, can chi, cát hung -->
         <p>
           Đây là ngày <strong>{{ activeLunarInfo.solarDay }} tháng {{ activeLunarInfo.solarMonth }} năm {{ activeLunarInfo.solarYear }}</strong> dương lịch, 
@@ -98,7 +98,7 @@ function handleSelectDate(newDate) {
         </p>
 
         <!-- Đoạn 2 (Nếu có ngày lễ/sự kiện): Mô tả sự kiện -->
-        <p v-if="activeLunarInfo.holidayParagraph" class="bg-rose-50 border-l-4 border-rose-500 p-3.5 rounded-r-xl text-rose-800 font-medium">
+        <p v-if="activeLunarInfo.holidayParagraph" class="bg-rose-50 dark:bg-rose-950/30 border-l-4 border-rose-500 p-3.5 rounded-r-xl text-rose-800 dark:text-rose-300 font-medium">
           {{ activeLunarInfo.holidayParagraph }}
         </p>
 
@@ -110,7 +110,7 @@ function handleSelectDate(newDate) {
         <!-- Đoạn 4: Giờ hoàng đạo và dẫn dắt -->
         <p>
           Giờ hoàng đạo trong ngày này bao gồm: 
-          <strong class="text-amber-700">
+          <strong class="text-amber-700 dark:text-amber-400">
             {{ activeLunarInfo.hoangDaoList.map(h => `${h.chiName} (${h.range})`).join(', ') }}
           </strong>. 
           Quý bản mệnh chú ý lựa chọn để mọi công việc hanh thông và viên mãn.
