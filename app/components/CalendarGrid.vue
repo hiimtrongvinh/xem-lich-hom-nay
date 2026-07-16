@@ -167,19 +167,33 @@ function isSpecialLunarDay(day) {
     <!-- Header Navigation Layout: < Tháng trước | Chọn tháng | Chọn năm | Di chuyển | Tháng sau > -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-slate-200">
       
-      <!-- Prev Month Button -->
-      <button 
-        @click="prevMonth" 
-        class="flex items-center justify-center gap-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 border border-slate-200 px-4 py-2.5 rounded-xl transition-all text-slate-700 hover:text-amber-600"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
-        Tháng trước
-      </button>
+      <!-- Mobile Helper Wrapper: keeps buttons side-by-side on mobile, resets on desktop -->
+      <div class="flex items-center justify-between gap-2 w-full sm:w-auto order-2 sm:order-none">
+        <!-- Prev Month Button -->
+        <button 
+          @click="prevMonth" 
+          class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 border border-slate-200 px-4 py-2.5 rounded-xl transition-all text-slate-700 hover:text-amber-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Tháng trước
+        </button>
+        
+        <!-- Next Month Button (Mobile only inside helper) -->
+        <button 
+          @click="nextMonth" 
+          class="sm:hidden flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 border border-slate-200 px-4 py-2.5 rounded-xl transition-all text-slate-700 hover:text-amber-600"
+        >
+          Tháng sau
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
       
       <!-- Middle Controls (Dropdowns + Button) -->
-      <div class="flex items-center justify-center gap-2">
+      <div class="flex items-center justify-center gap-2 order-1 sm:order-none w-full sm:w-auto">
         <!-- Month Dropdown -->
         <select 
           v-model="selectedMonth" 
@@ -212,10 +226,10 @@ function isSpecialLunarDay(day) {
         </button>
       </div>
 
-      <!-- Next Month Button -->
+      <!-- Next Month Button (Desktop only on the right) -->
       <button 
         @click="nextMonth" 
-        class="flex items-center justify-center gap-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 border border-slate-200 px-4 py-2.5 rounded-xl transition-all text-slate-700 hover:text-amber-600"
+        class="hidden sm:flex items-center justify-center gap-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 border border-slate-200 px-4 py-2.5 rounded-xl transition-all text-slate-700 hover:text-amber-600"
       >
         Tháng sau
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
@@ -231,7 +245,7 @@ function isSpecialLunarDay(day) {
         <div 
           v-for="header in weekHeaders" 
           :key="header" 
-          class="w-10 xs:w-12 sm:w-14 text-center text-xs font-bold text-slate-500 py-2 uppercase tracking-wider"
+          class="w-10 xs:w-12 sm:w-14 text-center text-xs font-bold text-slate-500 py-2 tracking-wider"
         >
           {{ header }}
         </div>

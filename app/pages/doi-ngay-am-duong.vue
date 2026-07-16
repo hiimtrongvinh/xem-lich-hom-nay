@@ -153,7 +153,7 @@ useSeoMeta({
           <!-- HÀNG 3: Nhập ngày đầu vào -->
           <div class="space-y-3">
             <div class="flex items-center justify-between flex-wrap gap-2">
-              <span class="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider">Nhập ngày cần chuyển đổi</span>
+              <span class="text-[12.5px] font-bold text-slate-500 tracking-wider">Nhập ngày cần chuyển đổi</span>
               
               <!-- Leap Month Checkbox (Moved next to Nhập ngày header) -->
               <div v-if="!isSolarToLunar" class="flex items-center gap-1.5">
@@ -172,21 +172,21 @@ useSeoMeta({
             <!-- Solar Inputs -->
             <div v-if="isSolarToLunar" class="grid grid-cols-3 gap-3">
               <div class="space-y-1 relative">
-                <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Ngày dương</label>
+                <label class="text-[11.5px] text-slate-400 font-bold block tracking-wider">Ngày dương</label>
                 <input v-model.number="solarDay" list="solar-days" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                 <datalist id="solar-days">
                   <option v-for="d in dayOptions" :key="d" :value="d" />
                 </datalist>
               </div>
               <div class="space-y-1 relative">
-                <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Tháng dương</label>
+                <label class="text-[11.5px] text-slate-400 font-bold block tracking-wider">Tháng dương</label>
                 <input v-model.number="solarMonth" list="solar-months" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                 <datalist id="solar-months">
                   <option v-for="m in monthOptions" :key="m" :value="m">Tháng {{ m }}</option>
                 </datalist>
               </div>
               <div class="space-y-1 relative">
-                <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Năm dương</label>
+                <label class="text-[11.5px] text-slate-400 font-bold block tracking-wider">Năm dương</label>
                 <input v-model.number="solarYear" list="solar-years" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                 <datalist id="solar-years">
                   <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
@@ -198,21 +198,21 @@ useSeoMeta({
             <div v-else class="space-y-3">
               <div class="grid grid-cols-3 gap-3">
                 <div class="space-y-1 relative">
-                  <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Ngày âm</label>
+                  <label class="text-[11.5px] text-slate-400 font-bold block tracking-wider">Ngày âm</label>
                   <input v-model.number="lunarDay" list="lunar-days" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                   <datalist id="lunar-days">
                     <option v-for="d in dayOptions.slice(0, 30)" :key="d" :value="d" />
                   </datalist>
                 </div>
                 <div class="space-y-1 relative">
-                  <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Tháng âm</label>
+                  <label class="text-[11.5px] text-slate-400 font-bold block tracking-wider">Tháng âm</label>
                   <input v-model.number="lunarMonth" list="lunar-months" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                   <datalist id="lunar-months">
                     <option v-for="m in monthOptions" :key="m" :value="m">Tháng {{ THANG[m - 1] }}</option>
                   </datalist>
                 </div>
                 <div class="space-y-1 relative">
-                  <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Năm âm</label>
+                  <label class="text-[11.5px] text-slate-400 font-bold block tracking-wider">Năm âm</label>
                   <input v-model.number="lunarYear" list="lunar-years" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                   <datalist id="lunar-years">
                     <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
@@ -225,7 +225,7 @@ useSeoMeta({
           <!-- HÀNG 4: Kết quả đầu ra với Nút Xem Chi Tiết -->
           <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <span class="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Tổng quan kết quả</span>
+              <span class="text-[12.5px] font-bold text-slate-500 tracking-wider block mb-1">Tổng quan kết quả</span>
               <div v-if="conversionResult.success" class="space-y-1">
                 <span class="text-xs text-slate-400 block leading-tight">{{ conversionResult.inputStr }}</span>
                 <div class="text-base sm:text-lg font-extrabold text-amber-600 leading-snug">

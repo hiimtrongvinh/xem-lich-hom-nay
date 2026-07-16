@@ -83,8 +83,8 @@ const isDateToday = computed(() => {
       <div class="sm:hidden grid grid-cols-3 py-3.5 border-b border-slate-100 text-center relative gap-x-2">
         <!-- Ngày Column -->
         <div class="flex flex-col items-center">
-          <span class="text-slate-400 font-bold text-[11px] uppercase tracking-wider">Ngày</span>
-          <span class="text-amber-700 font-extrabold text-xs mt-1 whitespace-nowrap">{{ info.dayCanChi }}</span>
+          <span class="text-slate-400 font-bold text-[13px]">Ngày</span>
+          <span class="text-amber-700 font-extrabold text-base mt-1 whitespace-nowrap">{{ info.dayCanChi }}</span>
         </div>
         
         <!-- Divider 1 -->
@@ -92,8 +92,8 @@ const isDateToday = computed(() => {
         
         <!-- Tháng Column -->
         <div class="flex flex-col items-center">
-          <span class="text-slate-400 font-bold text-[11px] uppercase tracking-wider">Tháng</span>
-          <span class="text-slate-700 font-extrabold text-xs mt-1 whitespace-nowrap">{{ info.monthCanChi }}</span>
+          <span class="text-slate-400 font-bold text-[13px]">Tháng</span>
+          <span class="text-slate-700 font-extrabold text-base mt-1 whitespace-nowrap">{{ info.monthCanChi }}</span>
         </div>
         
         <!-- Divider 2 -->
@@ -101,8 +101,8 @@ const isDateToday = computed(() => {
         
         <!-- Năm Column -->
         <div class="flex flex-col items-center">
-          <span class="text-slate-400 font-bold text-[11px] uppercase tracking-wider">Năm</span>
-          <span class="text-slate-700 font-extrabold text-xs mt-1 whitespace-nowrap">{{ info.yearCanChi }}</span>
+          <span class="text-slate-400 font-bold text-[13px] ">Năm</span>
+          <span class="text-slate-700 font-extrabold text-base mt-1 whitespace-nowrap">{{ info.yearCanChi }}</span>
         </div>
       </div>
 
@@ -126,15 +126,14 @@ const isDateToday = computed(() => {
 
       <!-- 5. Giờ hoàng đạo -->
       <div class="space-y-2">
-        <span class="text-[13px] font-bold tracking-wider text-slate-400 uppercase block">Giờ hoàng đạo</span>
-        <div class="grid grid-cols-3 gap-1.5">
+        <span class="text-[13px] font-bold text-slate-400 block">Giờ hoàng đạo</span>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2">
           <span 
             v-for="item in info.hoangDaoList" 
             :key="item.chiName" 
-            class="text-[11.5px] sm:text-xs bg-amber-500/5 hover:bg-amber-500/10 text-amber-700 border border-amber-500/15 py-1.5 rounded-xl flex items-center justify-center gap-1 font-bold transition-all text-center whitespace-nowrap"
+            class="text-[11.5px] sm:text-xs bg-amber-500/5 hover:bg-amber-500/10 text-amber-700 border border-amber-500/15 py-1.5 px-2 rounded-xl flex items-center justify-center gap-1 font-bold transition-all text-center whitespace-nowrap"
             :title="item.range"
           >
-            <span class="w-1 h-1 rounded-full bg-amber-500 shrink-0"></span>
             <span>{{ item.chiName }} <span class="opacity-60 text-[10.5px] font-medium">{{ item.range }}</span></span>
           </span>
         </div>
