@@ -1,12 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getLunarDayInfo, convertLunar2Solar, convertSolar2Lunar, getYearCanChi, THANG } from '~/utils/lunar'
 
 const router = useRouter()
 
-// Default active date is today
-const activeDate = ref(new Date())
+// Use useState to share initial render dates between server and client
+const activeDate = useState('active-date', () => new Date())
+const todayState = useState('today-state', () => new Date())
 
 // Get Lunar Info for the active date
 const activeLunarInfo = computed(() => {
@@ -36,9 +37,19 @@ function selectToday() {
 
 // ================= COMPACT CONVERTER WIDGET DATA =================
 const isSolarToLunar = ref(true)
-const convDay = ref(new Date().getDate())
-const convMonth = ref(new Date().getMonth() + 1)
-const convYear = ref(new Date().getFullYear())
+const convDay = ref(todayState.value.getDate())
+const convMonth = ref(todayState.value.getMonth() + 1)
+const convYear = ref(todayState.value.getFullYear())
+
+onMounted(() => {
+  activeDate.value = new Date()
+  todayState.value = new Date()
+  
+  const today = new Date()
+  convDay.value = today.getDate()
+  convMonth.value = today.getMonth() + 1
+  convYear.value = today.getFullYear()
+})
 
 const dayOptions = Array.from({ length: 31 }, (_, i) => i + 1)
 const monthOptions = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -224,14 +235,14 @@ useSeoMeta({
         <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
           <button 
             @click="isSolarToLunar = true" 
-            class="px-3.5 py-1 rounded-md text-[10px] font-bold transition-all"
+            class="px-3.5 py-1 rounded-md text-[11.5px] font-bold transition-all"
             :class="isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500'"
           >
             Dương → Âm
           </button>
           <button 
             @click="isSolarToLunar = false" 
-            class="px-3.5 py-1 rounded-md text-[10px] font-bold transition-all"
+            class="px-3.5 py-1 rounded-md text-[11.5px] font-bold transition-all"
             :class="!isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500'"
           >
             Âm → Dương
@@ -244,7 +255,7 @@ useSeoMeta({
         <!-- Cột đầu vào (col-span-5) -->
         <div class="md:col-span-5 flex items-center gap-2">
           <div class="flex-1 relative">
-            <label class="text-[9px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Ngày</label>
+            <label class="text-[11px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Ngày</label>
             <input 
               v-model.number="convDay" 
               list="conv-days"
@@ -255,7 +266,7 @@ useSeoMeta({
             </datalist>
           </div>
           <div class="flex-1 relative">
-            <label class="text-[9px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Tháng</label>
+            <label class="text-[11px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Tháng</label>
             <input 
               v-model.number="convMonth" 
               list="conv-months"
@@ -266,7 +277,7 @@ useSeoMeta({
             </datalist>
           </div>
           <div class="flex-grow relative">
-            <label class="text-[9px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Năm</label>
+            <label class="text-[11px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Năm</label>
             <input 
               v-model.number="convYear" 
               list="conv-years"
@@ -310,7 +321,7 @@ useSeoMeta({
     <div class="space-y-4">
       <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
         <span class="w-1 h-5 bg-red-500 rounded-full"></span>
-        Sự kiện Âm lịch sắp tới
+        Sự kiện sắp tới
       </h3>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -325,7 +336,7 @@ useSeoMeta({
           </div>
           <div class="mt-4 flex items-baseline justify-between">
             <span class="text-2xl font-black text-amber-500">{{ evt.daysLeft }}</span>
-            <span class="text-slate-400 text-[10px]">ngày {{ evt.solarStr }}</span>
+            <span class="text-slate-400 text-[11.5px]">ngày {{ evt.solarStr }}</span>
           </div>
         </div>
       </div>

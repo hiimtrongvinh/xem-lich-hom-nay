@@ -1,11 +1,16 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+
+const todayState = useState('today-state', () => new Date())
+
+onMounted(() => {
+  todayState.value = new Date()
+})
 
 // Current month route for Lịch Tháng
 const currentMonthRoute = computed(() => {
-  const today = new Date()
-  const y = today.getFullYear()
-  const m = String(today.getMonth() + 1).padStart(2, '0')
+  const y = todayState.value.getFullYear()
+  const m = String(todayState.value.getMonth() + 1).padStart(2, '0')
   return `/thang/${y}-${m}`
 })
 </script>

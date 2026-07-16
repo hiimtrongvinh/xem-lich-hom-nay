@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { convertSolar2Lunar, convertLunar2Solar, getYearCanChi, THANG, getLunarDayInfo } from '~/utils/lunar'
 
@@ -7,16 +7,28 @@ const router = useRouter()
 
 const isSolarToLunar = ref(true)
 
+const todayState = useState('today-state', () => new Date())
+
 // Solar Inputs
-const solarDay = ref(new Date().getDate())
-const solarMonth = ref(new Date().getMonth() + 1)
-const solarYear = ref(new Date().getFullYear())
+const solarDay = ref(todayState.value.getDate())
+const solarMonth = ref(todayState.value.getMonth() + 1)
+const solarYear = ref(todayState.value.getFullYear())
 
 // Lunar Inputs
 const lunarDay = ref(15)
 const lunarMonth = ref(8)
-const lunarYear = ref(new Date().getFullYear())
+const lunarYear = ref(todayState.value.getFullYear())
 const lunarLeap = ref(false)
+
+onMounted(() => {
+  todayState.value = new Date()
+  
+  const today = new Date()
+  solarDay.value = today.getDate()
+  solarMonth.value = today.getMonth() + 1
+  solarYear.value = today.getFullYear()
+  lunarYear.value = today.getFullYear()
+})
 
 // Options arrays
 const dayOptions = Array.from({ length: 31 }, (_, i) => i + 1)
@@ -90,8 +102,8 @@ useSeoMeta({
     <!-- Switch and Input panel layout (Left: Day Block col-span-5, Right: Converter col-span-7) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
       
-      <!-- Calendar Day Block (Left 5 columns) -->
-      <div class="lg:col-span-5 flex flex-col">
+      <!-- Calendar Day Block (Left 5 columns) - Shifted to bottom on mobile -->
+      <div class="lg:col-span-5 flex flex-col order-2 lg:order-1">
         <div class="flex-grow">
           <div v-if="targetLunarInfo" class="h-full">
             <CalendarBlock :info="targetLunarInfo" @go-today="router.push('/')" />
@@ -108,8 +120,8 @@ useSeoMeta({
         </div>
       </div>
 
-      <!-- Input Panel / Conversion Tool (Right 7 columns) -->
-      <div class="lg:col-span-7 flex flex-col">
+      <!-- Input Panel / Conversion Tool (Right 7 columns) - Displayed first on mobile -->
+      <div class="lg:col-span-7 flex flex-col order-1 lg:order-2">
         <div class="glass-panel rounded-3xl p-6 shadow-xl border border-slate-200 h-full flex flex-col justify-between space-y-6">
           
           <!-- HÀNG 1: Tiêu đề Widget & Mô tả ngắn -->
@@ -140,26 +152,41 @@ useSeoMeta({
 
           <!-- HÀNG 3: Nhập ngày đầu vào -->
           <div class="space-y-3">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nhập ngày cần chuyển đổi</span>
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider">Nhập ngày cần chuyển đổi</span>
+              
+              <!-- Leap Month Checkbox (Moved next to Nhập ngày header) -->
+              <div v-if="!isSolarToLunar" class="flex items-center gap-1.5">
+                <input 
+                  type="checkbox" 
+                  id="lunar-leap-chk" 
+                  v-model="lunarLeap" 
+                  class="w-3.5 h-3.5 rounded text-amber-500 focus:ring-amber-500 bg-slate-100 border-slate-200"
+                />
+                <label for="lunar-leap-chk" class="text-[11.5px] text-slate-500 select-none cursor-pointer font-bold">
+                  Tháng nhuận âm lịch
+                </label>
+              </div>
+            </div>
             
             <!-- Solar Inputs -->
             <div v-if="isSolarToLunar" class="grid grid-cols-3 gap-3">
               <div class="space-y-1 relative">
-                <label class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Ngày dương</label>
+                <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Ngày dương</label>
                 <input v-model.number="solarDay" list="solar-days" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                 <datalist id="solar-days">
                   <option v-for="d in dayOptions" :key="d" :value="d" />
                 </datalist>
               </div>
               <div class="space-y-1 relative">
-                <label class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Tháng dương</label>
+                <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Tháng dương</label>
                 <input v-model.number="solarMonth" list="solar-months" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                 <datalist id="solar-months">
                   <option v-for="m in monthOptions" :key="m" :value="m">Tháng {{ m }}</option>
                 </datalist>
               </div>
               <div class="space-y-1 relative">
-                <label class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Năm dương</label>
+                <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Năm dương</label>
                 <input v-model.number="solarYear" list="solar-years" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                 <datalist id="solar-years">
                   <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
@@ -171,54 +198,52 @@ useSeoMeta({
             <div v-else class="space-y-3">
               <div class="grid grid-cols-3 gap-3">
                 <div class="space-y-1 relative">
-                  <label class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Ngày âm</label>
+                  <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Ngày âm</label>
                   <input v-model.number="lunarDay" list="lunar-days" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                   <datalist id="lunar-days">
                     <option v-for="d in dayOptions.slice(0, 30)" :key="d" :value="d" />
                   </datalist>
                 </div>
                 <div class="space-y-1 relative">
-                  <label class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Tháng âm</label>
+                  <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Tháng âm</label>
                   <input v-model.number="lunarMonth" list="lunar-months" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                   <datalist id="lunar-months">
                     <option v-for="m in monthOptions" :key="m" :value="m">Tháng {{ THANG[m - 1] }}</option>
                   </datalist>
                 </div>
                 <div class="space-y-1 relative">
-                  <label class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Năm âm</label>
+                  <label class="text-[11px] text-slate-400 font-bold block uppercase tracking-wider">Năm âm</label>
                   <input v-model.number="lunarYear" list="lunar-years" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 focus:outline-none text-xs font-semibold custom-select" />
                   <datalist id="lunar-years">
                     <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
                   </datalist>
                 </div>
               </div>
-
-              <!-- Leap Month Checkbox -->
-              <div class="flex items-center gap-2 pt-1">
-                <input 
-                  type="checkbox" 
-                  id="lunar-leap-chk" 
-                  v-model="lunarLeap" 
-                  class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-slate-100 border-slate-200"
-                />
-                <label for="lunar-leap-chk" class="text-xs text-slate-500 select-none cursor-pointer font-semibold">
-                  Đây là tháng nhuận (âm lịch)
-                </label>
-              </div>
             </div>
           </div>
 
-          <!-- HÀNG 4: Kết quả đầu ra -->
-          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/60 space-y-2">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tổng quan kết quả</span>
-            <div v-if="conversionResult.success" class="space-y-1">
-              <span class="text-xs text-slate-400 block">{{ conversionResult.inputStr }}</span>
-              <div class="text-lg font-bold text-amber-600 leading-tight">
-                {{ conversionResult.outputStr }}
+          <!-- HÀNG 4: Kết quả đầu ra với Nút Xem Chi Tiết -->
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <span class="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Tổng quan kết quả</span>
+              <div v-if="conversionResult.success" class="space-y-1">
+                <span class="text-xs text-slate-400 block leading-tight">{{ conversionResult.inputStr }}</span>
+                <div class="text-base sm:text-lg font-extrabold text-amber-600 leading-snug">
+                  {{ conversionResult.outputStr }}
+                </div>
+              </div>
+              <div class="text-red-500 text-sm font-semibold" v-else>
+                {{ conversionResult.msg }}
               </div>
             </div>
-            <div class="text-red-500 text-sm font-semibold" v-else>
-              {{ conversionResult.msg }}
+            
+            <div v-if="conversionResult.success" class="shrink-0 w-full sm:w-auto">
+              <NuxtLink 
+                :to="`/ngay/${conversionResult.formattedDate}`" 
+                class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-slate-950 hover:text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-amber-500/10 text-center block"
+              >
+                Xem Lịch Ngày
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -227,21 +252,12 @@ useSeoMeta({
 
     <!-- Detailed Interpretation right below the converter widgets -->
     <div v-if="targetLunarInfo && conversionResult.success" class="glass-panel rounded-3xl p-8 border border-slate-200 space-y-6">
-      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
-            Luận Giải Ngày Đã Chuyển Đổi ({{ targetLunarInfo.solarDay }}/{{ targetLunarInfo.solarMonth }}/{{ targetLunarInfo.solarYear }})
-          </h3>
-          <p class="text-xs text-slate-400 mt-1">Nội dung chi tiết luận đoán phong thủy ngày âm dương</p>
-        </div>
-        
-        <NuxtLink 
-          :to="`/ngay/${conversionResult.formattedDate}`" 
-          class="text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-650 font-bold px-4 py-2 rounded-xl border border-amber-500/25 transition-all"
-        >
-          Trang Luận Giải Riêng Biệt
-        </NuxtLink>
+      <div class="border-b border-slate-200 pb-4">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
+          Luận Giải Ngày Đã Chuyển Đổi ({{ targetLunarInfo.solarDay }}/{{ targetLunarInfo.solarMonth }}/{{ targetLunarInfo.solarYear }})
+        </h3>
+        <p class="text-xs text-slate-400 mt-1">Nội dung chi tiết luận đoán phong thủy ngày âm dương</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-slate-600">

@@ -11,6 +11,8 @@ const props = defineProps({
 
 const emit = defineEmits(['select-date', 'change-view'])
 
+const todayState = useState('today-state', () => new Date())
+
 // The month and year currently viewed in the grid
 const viewYear = ref(props.activeDate.getFullYear())
 const viewMonth = ref(props.activeDate.getMonth()) // 0-indexed
@@ -143,10 +145,9 @@ function selectDay(day) {
 }
 
 function isToday(date) {
-  const today = new Date()
-  return date.getDate() === today.getDate() &&
-         date.getMonth() === today.getMonth() &&
-         date.getFullYear() === today.getFullYear()
+  return date.getDate() === todayState.value.getDate() &&
+         date.getMonth() === todayState.value.getMonth() &&
+         date.getFullYear() === todayState.value.getFullYear()
 }
 
 function isActive(date) {
@@ -264,7 +265,7 @@ function isSpecialLunarDay(day) {
 
           <!-- Lunar day (small) -->
           <div 
-            class="text-[9px] xs:text-[10px] sm:text-xs text-right pr-0.5 font-mono font-bold leading-tight"
+            class="text-[10.5px] xs:text-[11.5px] sm:text-xs text-right pr-0.5 font-mono font-bold leading-tight"
             :class="[
               isSpecialLunarDay(day) ? 'text-amber-600 font-bold' : 'text-slate-400'
             ]"

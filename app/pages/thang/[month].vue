@@ -1,16 +1,22 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getLunarDayInfo, solarHolidays, lunarHolidays } from '~/utils/lunar'
 
 const route = useRoute()
 const router = useRouter()
 
+const todayState = useState('today-state', () => new Date())
+
+onMounted(() => {
+  todayState.value = new Date()
+})
+
 // Parse route param: yyyy-mm
 const monthData = computed(() => {
   const monthStr = route.params.month
-  let year = new Date().getFullYear()
-  let month = new Date().getMonth() + 1 // 1-indexed
+  let year = todayState.value.getFullYear()
+  let month = todayState.value.getMonth() + 1 // 1-indexed
   
   if (monthStr) {
     try {
@@ -111,8 +117,8 @@ useSeoMeta({
     <!-- 2-Column Hero Layout matching Home and Day pages -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
       
-      <!-- Blank Left Column (Col-span-5) to prevent jumping shift when selecting a day -->
-      <div class="lg:col-span-5 flex flex-col justify-center">
+      <!-- Blank Left Column (Col-span-5) to prevent jumping shift when selecting a day - Hidden on mobile -->
+      <div class="hidden lg:flex lg:col-span-5 flex-col justify-center">
         <div class="glass-panel rounded-3xl p-8 border border-slate-200 border-dashed text-slate-400 text-center flex flex-col items-center justify-center h-full min-h-[400px]">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto opacity-40 mb-3 text-slate-400">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 15.172a8.959 8.959 0 00-9.75-9.75M11.25 11.25l.041-.02a.75.75 0 11.026.04l-.067-.02z" />
@@ -213,7 +219,7 @@ useSeoMeta({
             </span>
             <div>
               <h4 class="font-bold text-sm text-slate-800 leading-snug">{{ h.name }}</h4>
-              <span class="text-[10px] text-slate-400 mt-0.5 block">{{ h.dateStr }}</span>
+              <span class="text-[11.5px] text-slate-400 mt-0.5 block">{{ h.dateStr }}</span>
             </div>
           </div>
         </div>

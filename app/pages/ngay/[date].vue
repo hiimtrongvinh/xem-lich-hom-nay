@@ -1,19 +1,25 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getLunarDayInfo } from '~/utils/lunar'
 
 const route = useRoute()
 const router = useRouter()
 
+const todayState = useState('today-state', () => new Date())
+
+onMounted(() => {
+  todayState.value = new Date()
+})
+
 // Parse route date parameter (format: yyyy-mm-dd)
 const activeDate = computed(() => {
   const dateStr = route.params.date
-  if (!dateStr) return new Date()
+  if (!dateStr) return todayState.value
   
   try {
     const parts = dateStr.split('-')
-    if (parts.length !== 3) return new Date()
+    if (parts.length !== 3) return todayState.value
     
     const year = parseInt(parts[0], 10)
     const month = parseInt(parts[1], 10) - 1
@@ -21,10 +27,10 @@ const activeDate = computed(() => {
     
     const date = new Date(year, month, day)
     // Check if valid date
-    if (isNaN(date.getTime())) return new Date()
+    if (isNaN(date.getTime())) return todayState.value
     return date
   } catch (e) {
-    return new Date()
+    return todayState.value
   }
 })
 
