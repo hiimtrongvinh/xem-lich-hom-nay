@@ -181,60 +181,56 @@ useSeoMeta({
                 </div>
               </div>
               
-              <!-- Grid dãn rộng tối đa (max-w-2xl) -->
-              <div class="grid grid-cols-12 gap-3 items-center max-w-2xl w-full">
+              <!-- Flex dãn rộng tối đa (max-w-2xl) với các ô kích thước cố định vừa vặn trên mobile -->
+              <div class="flex flex-wrap items-center gap-1.5 sm:gap-3 max-w-2xl w-full">
                 <!-- Ngày đầu vào -->
-                <div class="col-span-3 flex items-center gap-2">
-                  <span class="text-sm text-slate-500 font-medium shrink-0">Ngày</span>
+                <div class="flex items-center gap-1">
+                  <span class="text-xs sm:text-sm text-slate-500 font-medium shrink-0">Ngày</span>
                   <input 
                     v-if="isSolarToLunar"
                     v-model.number="solarDay" 
                     list="solar-days" 
-                    class="w-full bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
+                    class="w-10 sm:w-12 bg-white border border-slate-250 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
                   />
                   <input 
                     v-else
                     v-model.number="lunarDay" 
                     list="lunar-days" 
-                    class="w-full bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
+                    class="w-10 sm:w-12 bg-white border border-slate-250 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
                   />
                 </div>
 
-                <span class="col-span-1 text-center text-slate-350 font-bold text-lg">/</span>
-
                 <!-- Tháng đầu vào -->
-                <div class="col-span-3 flex items-center gap-2">
-                  <span class="text-sm text-slate-500 font-medium shrink-0">Tháng</span>
+                <div class="flex items-center gap-1">
+                  <span class="text-xs sm:text-sm text-slate-500 font-medium shrink-0">Tháng</span>
                   <input 
                     v-if="isSolarToLunar"
                     v-model.number="solarMonth" 
                     list="solar-months" 
-                    class="w-full bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
+                    class="w-10 sm:w-12 bg-white border border-slate-250 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
                   />
                   <input 
                     v-else
                     v-model.number="lunarMonth" 
                     list="lunar-months" 
-                    class="w-full bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
-                />
+                    class="w-10 sm:w-12 bg-white border border-slate-250 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
+                  />
                 </div>
 
-                <span class="col-span-1 text-center text-slate-350 font-bold text-lg">/</span>
-
                 <!-- Năm đầu vào -->
-                <div class="col-span-4 flex items-center gap-2">
-                  <span class="text-sm text-slate-500 font-medium shrink-0">Năm</span>
+                <div class="flex items-center gap-1">
+                  <span class="text-xs sm:text-sm text-slate-500 font-medium shrink-0">Năm</span>
                   <input 
                     v-if="isSolarToLunar"
                     v-model.number="solarYear" 
                     list="solar-years" 
-                    class="w-full bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
+                    class="w-16 sm:w-20 bg-white border border-slate-250 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
                   />
                   <input 
                     v-else
                     v-model.number="lunarYear" 
                     list="lunar-years" 
-                    class="w-full bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
+                    class="w-16 sm:w-20 bg-white border border-slate-250 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" 
                   />
                 </div>
               </div>
@@ -246,48 +242,44 @@ useSeoMeta({
                 Kết quả {{ isSolarToLunar ? 'âm lịch' : 'dương lịch' }}
               </span>
               
-              <div v-if="conversionResult.success" class="flex items-center gap-3">
-                <!-- Grid kết quả dãn rộng tối đa đồng bộ (max-w-2xl) -->
-                <div class="grid grid-cols-12 gap-3 items-center max-w-2xl w-full">
+              <div v-if="conversionResult.success" class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <!-- Flex kết quả tương đương các ô nhập -->
+                <div class="flex items-center gap-1.5 sm:gap-3 max-w-2xl w-full">
                   <!-- Ngày đầu ra -->
-                  <div class="col-span-3 flex items-center gap-2">
-                    <span class="text-sm text-slate-400 font-medium shrink-0">Ngày</span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs sm:text-sm text-slate-450 font-medium shrink-0">Ngày</span>
                     <input 
                       readonly 
                       :value="String(conversionResult.outDay).padStart(2, '0')"
-                      class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+                      class="w-10 sm:w-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
                     />
                   </div>
 
-                  <span class="col-span-1 text-center text-slate-350 font-bold text-lg">/</span>
-
                   <!-- Tháng đầu ra -->
-                  <div class="col-span-3 flex items-center gap-2">
-                    <span class="text-sm text-slate-400 font-medium shrink-0">Tháng</span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs sm:text-sm text-slate-450 font-medium shrink-0">Tháng</span>
                     <input 
                       readonly 
                       :value="String(conversionResult.outMonth).padStart(2, '0')"
-                      class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+                      class="w-10 sm:w-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
                     />
                   </div>
 
-                  <span class="col-span-1 text-center text-slate-350 font-bold text-lg">/</span>
-
                   <!-- Năm đầu ra -->
-                  <div class="col-span-4 flex items-center gap-2">
-                    <span class="text-sm text-slate-400 font-medium shrink-0">Năm</span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs sm:text-sm text-slate-450 font-medium shrink-0">Năm</span>
                     <input 
                       readonly 
                       :value="conversionResult.outYear"
-                      class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+                      class="w-16 sm:w-20 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-1 sm:px-2 py-1 text-sm sm:text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
                     />
                   </div>
-                </div>
 
-                <!-- Nhãn tháng nhuận -->
-                <span v-if="conversionResult.isLeap" class="bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-400 text-[10px] font-bold px-1.5 py-1 rounded">
-                  Nhuận
-                </span>
+                  <!-- Nhãn tháng nhuận -->
+                  <span v-if="conversionResult.isLeap" class="bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-400 text-[10px] font-bold px-1.5 py-0.5 rounded ml-1">
+                    Nhuận
+                  </span>
+                </div>
               </div>
               <div class="text-red-500 text-sm font-semibold" v-else>
                 {{ conversionResult.msg }}

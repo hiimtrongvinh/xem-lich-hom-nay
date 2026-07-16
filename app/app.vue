@@ -1,10 +1,24 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const todayState = useState('today-state', () => new Date())
+const isScrolled = ref(false)
+
+const handleScroll = () => {
+  if (typeof window !== 'undefined') {
+    isScrolled.value = window.scrollY > 20
+  }
+}
 
 onMounted(() => {
   todayState.value = new Date()
+  window.addEventListener('scroll', handleScroll, { passive: true })
+})
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', handleScroll)
+  }
 })
 
 // Current month route for Lịch Tháng
@@ -17,21 +31,28 @@ const currentMonthRoute = computed(() => {
 
 <template>
   <div class="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-amber-500/30 selection:text-amber-900">
-    <!-- Header -->
-    <header class="border-b border-slate-200 bg-white/95 sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center gap-3">
-          <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-red-650 flex items-center justify-center shadow-md">
+    <!-- Header / Nav Wrapper sticky at top -->
+    <header class="sticky top-0 z-50 bg-white/95 border-b border-slate-200 shadow-sm transition-all duration-300">
+      
+      <!-- Logo Container (Collapses on scroll on mobile) -->
+      <div 
+        :class="[
+          'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all duration-300 overflow-hidden',
+          isScrolled ? 'h-0 md:h-16 opacity-0 md:opacity-100 py-0' : 'h-16 py-3'
+        ]"
+      >
+        <!-- Logo (Centered on mobile, left-aligned on desktop) -->
+        <NuxtLink to="/" class="flex items-center gap-3 mx-auto md:mx-0">
+          <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-red-650 flex items-center justify-center shadow-md shrink-0">
             <span class="font-bold text-lg text-white">L</span>
           </span>
-          <div>
-            <h1 class="font-bold text-lg leading-tight text-amber-600">Xem lịch hôm nay</h1>
-            <p class="text-xs text-slate-500">Xem lịch âm dương hôm nay</p>
+          <div class="text-left">
+            <h1 class="font-bold text-base sm:text-lg leading-tight text-amber-600">Xem lịch hôm nay</h1>
+            <p class="text-[10px] sm:text-xs text-slate-500">Xem lịch âm dương hôm nay</p>
           </div>
         </NuxtLink>
 
-        <!-- Navigation Links (Always Light Mode) -->
+        <!-- Desktop Navigation Links (hidden on mobile) -->
         <div class="flex items-center gap-6">
           <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
             <NuxtLink to="/" class="hover:text-amber-600 transition-colors" active-class="text-amber-600">Trang chủ</NuxtLink>
@@ -41,15 +62,23 @@ const currentMonthRoute = computed(() => {
           </nav>
         </div>
       </div>
-    </header>
 
-    <!-- Mobile Nav Bar -->
-    <div class="md:hidden border-b border-slate-200 bg-white text-xs font-bold py-2.5 px-4 flex justify-around text-slate-500">
-      <NuxtLink to="/" class="hover:text-amber-500" active-class="text-amber-500">Trang chủ</NuxtLink>
-      <NuxtLink :to="currentMonthRoute" class="hover:text-amber-500" active-class="text-amber-500">Lịch Tháng</NuxtLink>
-      <NuxtLink to="/doi-ngay-am-duong" class="hover:text-amber-500" active-class="text-amber-500">Đổi Ngày</NuxtLink>
-      <NuxtLink to="/cam-nang" class="hover:text-amber-500" active-class="text-amber-500">Cẩm Nang</NuxtLink>
-    </div>
+      <!-- Mobile Nav Bar (Sticky, always showing the 4 functions, right below logo/collapses to top-0 when scrolled) -->
+      <div class="md:hidden border-t border-slate-100 bg-white text-xs font-bold py-2.5 px-4 flex justify-around text-slate-500 transition-all duration-300">
+        <NuxtLink to="/" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
+          <span>Trang chủ</span>
+        </NuxtLink>
+        <NuxtLink :to="currentMonthRoute" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
+          <span>Lịch Tháng</span>
+        </NuxtLink>
+        <NuxtLink to="/doi-ngay-am-duong" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
+          <span>Đổi Ngày</span>
+        </NuxtLink>
+        <NuxtLink to="/cam-nang" class="hover:text-amber-500 flex flex-col items-center gap-0.5" active-class="text-amber-500">
+          <span>Cẩm Nang</span>
+        </NuxtLink>
+      </div>
+    </header>
 
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">

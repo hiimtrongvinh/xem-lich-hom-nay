@@ -273,27 +273,25 @@ useSeoMeta({
               <input 
                 v-model.number="convDay" 
                 list="conv-days"
-                class="w-16 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                class="w-12 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
               />
             </div>
-            <span class="text-slate-300 font-bold">/</span>
             <!-- Tháng -->
             <div class="flex items-center gap-1">
               <span class="text-sm text-slate-500 font-medium">Tháng</span>
               <input 
                 v-model.number="convMonth" 
                 list="conv-months"
-                class="w-16 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                class="w-12 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
               />
             </div>
-            <span class="text-slate-300 font-bold">/</span>
             <!-- Năm -->
             <div class="flex items-center gap-1">
               <span class="text-sm text-slate-500 font-medium">Năm</span>
               <input 
                 v-model.number="convYear" 
                 list="conv-years"
-                class="w-24 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                class="w-20 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
               />
             </div>
           </div>
@@ -313,27 +311,25 @@ useSeoMeta({
               <input 
                 readonly 
                 :value="String(convResult.outDay).padStart(2, '0')"
-                class="w-16 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+                class="w-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
               />
             </div>
-            <span class="text-slate-300 font-bold">/</span>
             <!-- Tháng -->
             <div class="flex items-center gap-1">
               <span class="text-sm text-slate-400 font-medium">Tháng</span>
               <input 
                 readonly 
                 :value="String(convResult.outMonth).padStart(2, '0')"
-                class="w-16 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+                class="w-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
               />
             </div>
-            <span class="text-slate-300 font-bold">/</span>
             <!-- Năm -->
             <div class="flex items-center gap-1">
               <span class="text-sm text-slate-400 font-medium">Năm</span>
               <input 
                 readonly 
                 :value="convResult.outYear"
-                class="w-24 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+                class="w-20 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
               />
             </div>
             <span v-if="convResult.isLeap" class="text-[10px] bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-400 font-bold px-1.5 py-0.5 rounded ml-1">
