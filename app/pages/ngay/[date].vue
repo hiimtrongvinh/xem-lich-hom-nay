@@ -80,9 +80,9 @@ function handleSelectDate(newDate) {
       <div class="border-b border-slate-200 pb-4">
         <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
           <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
-          Luận Giải Chi Tiết Ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
+          Luận giải chi tiết ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
         </h3>
-        <p class="text-xs text-slate-400 mt-1">Thông tin luận giải lịch pháp phong thủy theo can chi</p>
+        <p class="text-xs text-slate-400 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
       </div>
 
       <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600">

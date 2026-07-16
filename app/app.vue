@@ -58,10 +58,17 @@ const currentMonthRoute = computed(() => {
 
     <!-- Footer -->
     <footer class="border-t border-slate-200 bg-white py-8 text-center text-sm text-slate-500">
-      <div class="max-w-7xl mx-auto px-4">
-        <p>Xem lịch hôm nay phát triển bởi Lilytech.</p>
-        <p class="text-xs mt-1 text-slate-400">Phát triển bởi Lilytech.</p>
-      </div>
+      <p class="font-medium text-slate-700">
+      © 2026 Xem Lịch Hôm Nay. 
+      <span class="text-slate-500 font-normal">| Phát triển bởi 
+        <a href="https://lilytech.com.vn/" target="_blank" rel="noopener" class="text-amber-600 hover:underline font-semibold">Lilytech</a>
+      </span>
+    </p>
+
+    <!-- Tuyên bố miễn trừ trách nhiệm -->
+    <p class="text-[11.5px] leading-relaxed text-slate-400 max-w-2xl mx-auto">
+      Mọi thông tin luận giải, ngày lành tháng tốt, giờ hoàng đạo trên website mang tính chất chiêm nghiệm và tham khảo. <br> Quý độc giả nên cân nhắc kết hợp cùng các yếu tố thực tiễn khi đưa ra quyết định.
+    </p>
     </footer>
   </div>
 </template>

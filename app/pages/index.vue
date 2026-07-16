@@ -64,16 +64,17 @@ const convResult = computed(() => {
         parseInt(convMonth.value, 10),
         parseInt(convYear.value, 10)
       )
-      const nhuan = res[3] === 1 ? ' (Nhuận)' : ''
-      const canChiYear = getYearCanChi(res[2])
       const formattedDate = `${convYear.value}-${String(convMonth.value).padStart(2, '0')}-${String(convDay.value).padStart(2, '0')}`
       return {
         success: true,
-        outputStr: `Âm lịch: Ngày ${res[0]} tháng ${THANG[res[1] - 1]}${nhuan} năm ${canChiYear}`,
+        outDay: res[0],
+        outMonth: res[1],
+        outYear: res[2],
+        isLeap: res[3] === 1,
         url: `/ngay/${formattedDate}`
       }
     } catch (e) {
-      return { success: false, msg: 'Ngày dương lịch không hợp lệ' }
+      return { success: false, msg: 'Ngày dương không hợp lệ' }
     }
   } else {
     try {
@@ -83,15 +84,18 @@ const convResult = computed(() => {
         parseInt(convYear.value, 10),
         0 // non-leap default for quick widget
       )
-      if (res[0] === 0) return { success: false, msg: 'Ngày âm lịch không tồn tại.' }
+      if (res[0] === 0) return { success: false, msg: 'Ngày âm không tồn tại.' }
       const formattedDate = `${res[2]}-${String(res[1]).padStart(2, '0')}-${String(res[0]).padStart(2, '0')}`
       return {
         success: true,
-        outputStr: `Dương lịch: Ngày ${res[0]}/${res[1]}/${res[2]}`,
+        outDay: res[0],
+        outMonth: res[1],
+        outYear: res[2],
+        isLeap: false,
         url: `/ngay/${formattedDate}`
       }
     } catch (e) {
-      return { success: false, msg: 'Ngày âm lịch không hợp lệ' }
+      return { success: false, msg: 'Ngày âm không hợp lệ' }
     }
   }
 })
@@ -195,13 +199,12 @@ useSeoMeta({
       <div class="border-b border-slate-200 pb-4">
         <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
           <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
-          Luận Giải Chi Tiết Ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
+          Luận giải chi tiết ngày {{ activeLunarInfo.solarDay }}/{{ activeLunarInfo.solarMonth }}/{{ activeLunarInfo.solarYear }}
         </h3>
-        <p class="text-xs text-slate-400 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
+        <p class="text-sm text-slate-400 mt-1">Nội dung giải luận lịch pháp phong thủy tham khảo</p>
       </div>
 
       <div class="space-y-4 text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-600">
-        <!-- Đoạn 1: Dương lịch, âm lịch, can chi, cát hung -->
         <p>
           Đây là ngày <strong>{{ activeLunarInfo.solarDay }} tháng {{ activeLunarInfo.solarMonth }} năm {{ activeLunarInfo.solarYear }}</strong> dương lịch, 
           tức ngày <strong>{{ activeLunarInfo.lunarDay }} tháng {{ activeLunarInfo.lunarMonth }}</strong> âm lịch (ngày {{ activeLunarInfo.monthName }}), 
@@ -212,17 +215,14 @@ useSeoMeta({
           <span v-else>quý bản mệnh có thể tiến hành các công việc thường nhật và giao dịch nhỏ một cách bình hòa và suôn sẻ.</span>
         </p>
 
-        <!-- Đoạn 2 (Nếu có ngày lễ/sự kiện): Mô tả sự kiện -->
         <p v-if="activeLunarInfo.holidayParagraph" class="bg-rose-50 border-l-4 border-rose-500 p-3.5 rounded-r-xl text-rose-800 font-medium">
           {{ activeLunarInfo.holidayParagraph }}
         </p>
 
-        <!-- Đoạn 3: Tiết khí và mô tả hoàn chỉnh -->
         <p>
           {{ activeLunarInfo.tietKhiParagraph }}
         </p>
         
-        <!-- Đoạn 4: Giờ hoàng đạo và dẫn dắt -->
         <p>
           Giờ hoàng đạo trong ngày này bao gồm: 
           <strong class="text-amber-700">
@@ -233,92 +233,124 @@ useSeoMeta({
       </div>
     </div>
 
-    <!-- SECTION 3: Widget đổi ngày âm dương nhanh (Theo đúng sơ đồ cấu trúc của người dùng) -->
-    <div class="glass-panel rounded-3xl p-6 border border-slate-200 space-y-4">
+    <!-- SECTION 3: Widget đổi ngày âm dương nhanh (Đầu vào, Đầu ra, Nút Chi tiết trên 1 hàng ngang) -->
+    <div class="glass-panel rounded-3xl p-5 border border-slate-200 space-y-3">
       
       <!-- HÀNG 1: Tên Widget | Công tắc dương -> âm / âm -> dương -->
-      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h3 class="text-[12.5px] font-bold text-slate-700 tracking-wider">Đổi ngày âm dương nhanh</h3>
+      <div class="flex items-center justify-between border-b border-slate-150 pb-2.5">
+        <h3 class="text-lg font-bold text-slate-700 tracking-wide">Đổi ngày âm dương nhanh</h3>
         
         <!-- Switch Button Group -->
         <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
           <button 
             @click="isSolarToLunar = true" 
-            class="px-3.5 py-1 rounded-md text-[11.5px] font-bold transition-all"
+            class="px-3 py-1 rounded-md text-[11px] font-bold transition-all"
             :class="isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500'"
           >
-            Dương → Âm
+            Dương lịch → Âm lịch
           </button>
           <button 
             @click="isSolarToLunar = false" 
-            class="px-3.5 py-1 rounded-md text-[11.5px] font-bold transition-all"
+            class="px-3 py-1 rounded-md text-[11px] font-bold transition-all"
             :class="!isSolarToLunar ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-500'"
           >
-            Âm → Dương
+            Âm lịch → Dương lịch
           </button>
         </div>
       </div>
 
-      <!-- HÀNG 2: Ngày tháng năm đầu vào | Ngày tháng năm đầu ra | Nút xem Chi tiết -->
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-        <!-- Cột đầu vào (col-span-5) -->
-        <div class="md:col-span-5 flex items-center gap-2">
-          <div class="flex-1 relative">
-            <label class="text-[11px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Ngày</label>
-            <input 
-              v-model.number="convDay" 
-              list="conv-days"
-              class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 custom-select"
-            />
-            <datalist id="conv-days">
-              <option v-for="d in dayOptions" :key="d" :value="d" />
-            </datalist>
+      <!-- HÀNG 2: Đầu vào, Đầu ra và Nút Chi tiết trên cùng 1 hàng ngang -->
+      <div class="flex flex-col xl:flex-row items-center justify-between gap-4 w-full bg-white dark:bg-slate-950">
+        
+        <!-- Tổ hợp Đầu vào + Mũi tên + Đầu ra -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full xl:w-auto justify-center xl:justify-start">
+          
+          <!-- Cụm Đầu vào -->
+          <div class="flex items-center gap-2 shrink-0">
+            <!-- Ngày -->
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-slate-500 font-medium">Ngày</span>
+              <input 
+                v-model.number="convDay" 
+                list="conv-days"
+                class="w-16 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+              />
+            </div>
+            <span class="text-slate-300 font-bold">/</span>
+            <!-- Tháng -->
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-slate-500 font-medium">Tháng</span>
+              <input 
+                v-model.number="convMonth" 
+                list="conv-months"
+                class="w-16 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+              />
+            </div>
+            <span class="text-slate-300 font-bold">/</span>
+            <!-- Năm -->
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-slate-500 font-medium">Năm</span>
+              <input 
+                v-model.number="convYear" 
+                list="conv-years"
+                class="w-24 bg-white border border-slate-250 rounded-lg px-2 py-1.5 text-base font-extrabold text-center text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+              />
+            </div>
           </div>
-          <div class="flex-1 relative">
-            <label class="text-[11px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Tháng</label>
-            <input 
-              v-model.number="convMonth" 
-              list="conv-months"
-              class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 custom-select"
-            />
-            <datalist id="conv-months">
-              <option v-for="m in monthOptions" :key="m" :value="m">Tháng {{ m }}</option>
-            </datalist>
+
+          <!-- Mũi tên kết nối -->
+          <div class="hidden sm:block text-slate-300 dark:text-slate-700 shrink-0 mx-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
           </div>
-          <div class="flex-grow relative">
-            <label class="text-[11px] text-slate-400 block mb-0.5 font-bold uppercase tracking-wider">Năm</label>
-            <input 
-              v-model.number="convYear" 
-              list="conv-years"
-              class="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 custom-select"
-            />
-            <datalist id="conv-years">
-              <option v-for="y in yearOptions" :key="y" :value="y">Năm {{ y }}</option>
-            </datalist>
+
+          <!-- Cụm Đầu ra (Các ô hiển thị kết quả) -->
+          <div v-if="convResult.success" class="flex items-center gap-2 shrink-0">
+            <!-- Ngày -->
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-slate-400 font-medium">Ngày</span>
+              <input 
+                readonly 
+                :value="String(convResult.outDay).padStart(2, '0')"
+                class="w-16 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+              />
+            </div>
+            <span class="text-slate-300 font-bold">/</span>
+            <!-- Tháng -->
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-slate-400 font-medium">Tháng</span>
+              <input 
+                readonly 
+                :value="String(convResult.outMonth).padStart(2, '0')"
+                class="w-16 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+              />
+            </div>
+            <span class="text-slate-300 font-bold">/</span>
+            <!-- Năm -->
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-slate-400 font-medium">Năm</span>
+              <input 
+                readonly 
+                :value="convResult.outYear"
+                class="w-24 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 text-base font-black text-center text-amber-600 dark:text-amber-500 focus:outline-none cursor-default"
+              />
+            </div>
+            <span v-if="convResult.isLeap" class="text-[10px] bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-400 font-bold px-1.5 py-0.5 rounded ml-1">
+              Nhuận
+            </span>
+          </div>
+          <div v-else class="text-sm font-bold text-rose-500">
+            {{ convResult.msg }}
           </div>
         </div>
 
-        <!-- Mũi tên ngăn cách trên Desktop (col-span-1) -->
-        <div class="hidden md:flex justify-center text-slate-350 col-span-1">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
-
-        <!-- Cột đầu ra - Hiển thị kết quả trực tiếp tại chỗ (col-span-4) -->
-        <div 
-          class="md:col-span-4 bg-slate-50 rounded-xl p-3 border border-slate-200 min-h-[46px] flex items-center justify-start text-xs font-bold leading-snug"
-          :class="convResult.success ? 'text-amber-700' : 'text-rose-500'"
-        >
-          {{ convResult.outputStr || convResult.msg }}
-        </div>
-
-        <!-- Nút xem Chi tiết (col-span-2) -->
-        <div class="md:col-span-2">
+        <!-- Nút Xem Chi Tiết -->
+        <div class="shrink-0 w-full xl:w-auto">
           <NuxtLink 
             v-if="convResult.success"
             :to="convResult.url" 
-            class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 hover:text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-amber-500/10 text-center block"
+            class="w-full xl:w-auto bg-amber-500 hover:bg-amber-600 text-slate-950 hover:text-slate-950 font-bold px-6 py-2 rounded-xl text-sm transition-all shadow-md shadow-amber-500/10 text-center block"
           >
             Chi Tiết
           </NuxtLink>

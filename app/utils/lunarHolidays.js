@@ -62,8 +62,8 @@ export const HOLIDAY_PARAGRAPHS = {
 	'Lễ Phật Đản (15/4)': 'Lễ Phật Đản rằm tháng Tư âm lịch kỷ niệm ngày Đức Phật Thích Ca Mâu Ni đản sinh. Đây là ngày lễ trọng đại của Phật giáo hướng con người tới tâm thiện lành, từ bi hỷ xả, cầu mong thế giới hòa bình, vạn sinh an lạc.',
 	'Tết Đoan Ngọ (5/5)': 'Tết Đoan Ngọ mùng 5 tháng 5 âm lịch, hay còn gọi là Tết diệt sâu bọ. Theo phong tục, mọi người thường ăn rượu nếp, quả chua vào sáng sớm để xua đuổi bệnh tật, cầu mong sức khỏe dồi dào và mùa màng tươi tốt.',
 	'Lễ Vu Lan (Rằm Tháng Bảy)': 'Lễ Vu Lan báo hiếu rằm tháng Bảy âm lịch là dịp tôn vinh lòng hiếu thảo kính yêu cha mẹ, tưởng nhớ tổ tiên và làm việc thiện tích đức cầu siêu cho vong linh, thể hiện tính nhân văn sâu sắc của đạo lý dân tộc.',
-	'Tết Trung Thu (Rằm Tháng Tám)': 'Tết Trung Thu rằm tháng Tám âm lịch là Tết đoàn viên dành cho mọi nhà, đặc biệt là các em Thiếu nhi. Trẻ em rước đèn phá cỗ dưới ánh trăng rằm sáng trong, cả gia đình sum họp thưởng trà ăn bánh trung thu ấm cúng.',
-	'Ngày Ông Táo chầu trời': 'Ngày mùng 23 tháng Chạp là ngày tiễn đưa Ông Công Ông Táo chầu trời để báo cáo mọi việc lớn nhỏ trong nhà của gia chủ suốt năm qua lên Ngọc Hoàng. Phong tục thả cá chép phóng sinh mang ý nghĩa tiễn Táo quân về trời bình an.'
+	'Tết Trung Thu (Rằm Tháng Tám)': 'Tết Trung Thu tức rằm tháng Tám âm lịch là Tết đoàn viên dành cho mọi nhà, đặc biệt là các em Thiếu nhi. Trẻ em rước đèn phá cỗ dưới ánh trăng rằm sáng trong, cả gia đình quây quần bên nhau trong không khí ấm cúng.',
+	'Ngày Ông Táo chầu trời': 'Ngày 23 tháng Chạp là ngày tiễn đưa Ông Công Ông Táo chầu trời để báo cáo mọi việc lớn nhỏ trong nhà của gia chủ suốt năm qua lên Ngọc Hoàng. Phong tục thả cá chép phóng sinh mang ý nghĩa tiễn Táo quân về trời bình an.'
 };
 
 export function getDaysInLunarMonth12(lunarYear) {
