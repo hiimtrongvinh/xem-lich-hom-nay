@@ -118,7 +118,7 @@ useSeoMeta({
       
       <!-- Left Column (Col-span-5) - Tabbed Day Summary to prevent scrolling -->
       <div class="lg:col-span-5 flex flex-col order-2 lg:order-1">
-        <div class="glass-panel rounded-3xl p-5 border border-slate-200 dark:border-slate-800 h-full flex flex-col min-h-[440px]">
+        <div class="glass-panel rounded-3xl p-5 border border-slate-200 dark:border-slate-800 h-full flex flex-col lg:min-h-[440px]">
           <!-- Title -->
           <div class="border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
             <h3 class="text-base font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
@@ -153,10 +153,10 @@ useSeoMeta({
           </div>
 
           <!-- Tabs Body (Uses flex-grow and overflow-y-auto to avoid page scroll) -->
-          <div class="flex-grow overflow-hidden relative min-h-[280px]">
+          <div class="flex-grow lg:overflow-hidden lg:relative lg:min-h-[280px]">
             
             <!-- Ngày Hoàng Đạo Tab -->
-            <div v-show="activeTab === 'good'" class="absolute inset-0 overflow-y-auto pr-1 space-y-3">
+            <div v-show="activeTab === 'good'" class="lg:absolute lg:inset-0 lg:overflow-y-auto pr-1 space-y-3">
               <p class="text-[11.5px] text-emerald-800 dark:text-emerald-300 bg-emerald-50/80 dark:bg-emerald-950/20 p-2.5 rounded-xl border border-emerald-500/10 leading-relaxed shrink-0">
                 <strong>Ngày Hoàng Đạo:</strong> Là ngày cát lành có sao tốt hộ trì, thích hợp tiến hành đại sự như cưới hỏi, khởi công, khai trương để thuận lợi cát tường.
               </p>
@@ -181,7 +181,7 @@ useSeoMeta({
             </div>
 
             <!-- Ngày Hắc Đạo Tab -->
-            <div v-show="activeTab === 'bad'" class="absolute inset-0 overflow-y-auto pr-1 space-y-3">
+            <div v-show="activeTab === 'bad'" class="lg:absolute lg:inset-0 lg:overflow-y-auto pr-1 space-y-3">
               <p class="text-[11.5px] text-rose-800 dark:text-rose-300 bg-rose-50/80 dark:bg-rose-950/20 p-2.5 rounded-xl border border-rose-500/10 leading-relaxed shrink-0">
                 <strong>Ngày Hắc Đạo:</strong> Là ngày chịu sự chi phối của hung tinh. Tránh khởi sự các công việc quan trọng, chỉ nên làm việc thường nhật để tránh trắc trở.
               </p>
@@ -206,10 +206,7 @@ useSeoMeta({
             </div>
 
             <!-- Ngày Lễ Tab -->
-            <div v-show="activeTab === 'holiday'" class="absolute inset-0 overflow-y-auto pr-1 space-y-3">
-              <p class="text-[11.5px] text-amber-800 dark:text-amber-300 bg-amber-50/80 dark:bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/10 leading-relaxed shrink-0">
-                <strong>Ngày Lễ & Kỷ Niệm:</strong> Các ngày Tết cổ truyền, ngày lễ truyền thống hoặc ngày kỷ niệm quốc tế nổi bật diễn ra trong tháng.
-              </p>
+            <div v-show="activeTab === 'holiday'" class="lg:absolute lg:inset-0 lg:overflow-y-auto pr-1 space-y-3">
               <div v-if="holidaysInMonth.length > 0" class="space-y-2">
                 <div 
                   v-for="h in holidaysInMonth" 
